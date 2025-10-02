@@ -6,25 +6,42 @@ This guide covers how to publish tree-sitter-craft to npm and create GitHub rele
 
 The repository is set up with GitHub Actions for automated publishing when you create a new tag.
 
-### Creating a Release
+### Creating a Release with release.sh Script
 
-1. **Update version in package.json**:
-   ```bash
-   npm version patch  # for bug fixes
-   npm version minor  # for new features
-   npm version major  # for breaking changes
-   ```
+The easiest way to create a release is using the provided script:
 
-2. **Push the tag**:
-   ```bash
-   git push origin main --tags
-   ```
+```bash
+# Create a new release (replace with desired version)
+./release.sh 0.2.0        # Bug fixes
+./release.sh 0.3.0        # New features  
+./release.sh 1.0.0        # Major release
+./release.sh 1.1.0-beta.1 # Pre-release
+```
 
-3. **Automated process will**:
-   - Run tests
-   - Build WASM module
-   - Publish to npm
-   - Create GitHub release with artifacts
+The script will:
+- Validate version format (semver)
+- Check for clean git state
+- Create and push the version tag
+- Trigger GitHub Actions workflow
+
+### Manual Tag Creation
+
+Alternatively, you can create tags manually:
+
+```bash
+git tag v1.0.0
+git push --tags
+```
+
+### Automated Workflow Process
+
+When a tag is pushed, GitHub Actions will:
+- Extract version from tag and update package.json
+- Run tests
+- Build WASM module
+- Publish to npm (only if successful)
+- Commit version bump back to repository
+- Create GitHub release with artifacts
 
 ## Manual Publishing
 

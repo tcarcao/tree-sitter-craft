@@ -40,6 +40,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -53,6 +55,12 @@ jobs:
       - name: Install tree-sitter CLI
         run: npm install -g tree-sitter-cli
       
+      - name: Update package.json version from tag
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "Updating package.json to version: $VERSION"
+          npm version $VERSION --no-git-tag-version
+      
       - name: Generate parser
         run: npm run generate
       
@@ -63,6 +71,15 @@ jobs:
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      - name: Commit version bump back to repository
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add package.json
+          git commit -m "chore: bump version to $VERSION [skip ci]" || echo "No changes to commit"
+          git push origin HEAD:main || echo "Failed to push, continuing..."
 
   create-release:
     needs: test
@@ -80,6 +97,12 @@ jobs:
       
       - name: Install tree-sitter CLI
         run: npm install -g tree-sitter-cli
+      
+      - name: Update package.json version from tag
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "Updating package.json to version: $VERSION"
+          npm version $VERSION --no-git-tag-version
       
       - name: Generate parser
         run: npm run generate
