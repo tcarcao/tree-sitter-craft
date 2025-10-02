@@ -12,4 +12,10 @@ try {
   binding.nodeTypeInfo = nodeTypes.default;
 } catch (_) {}
 
+// Named exports for compatibility
+export const language = binding;
+export const nodeTypes = binding.nodeTypeInfo;
+export const name = "tree-sitter-craft";
+
+// Default export for clean imports
 export default binding;

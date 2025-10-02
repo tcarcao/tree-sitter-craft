@@ -18,9 +18,22 @@ type NodeInfo =
       children: ChildNode[];
     });
 
-declare const nodeTypes: NodeInfo[];
+// Tree-sitter language interface
+interface Language {
+  readonly version: number;
+  readonly fieldCount: number;
+  readonly stateCount: number;
+  readonly fields: readonly string[];
+  readonly nodeTypeInfo?: NodeInfo[];
+}
 
-declare const language: unknown;
+declare const nodeTypes: NodeInfo[];
+declare const language: Language;
 declare const name: string;
 
+// Named exports
 export { nodeTypes, language, name };
+
+// Default export (the language binding)
+declare const binding: Language;
+export default binding;
