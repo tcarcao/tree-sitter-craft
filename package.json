@@ -1,0 +1,81 @@
+{
+  "name": "tree-sitter-craft",
+  "version": "0.1.0",
+  "description": "Tree-sitter grammar for Craft DSL - A domain-specific language for modeling business use cases and domain interactions",
+  "type": "module",
+  "author": "Tiago Carcao <tiago.carcao@example.com>",
+  "homepage": "https://github.com/tcarcao/tree-sitter-craft#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tcarcao/tree-sitter-craft.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tcarcao/tree-sitter-craft/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "tree-sitter",
+    "parser",
+    "grammar",
+    "craft",
+    "dsl",
+    "domain-driven-design",
+    "architecture",
+    "modeling",
+    "incremental-parsing"
+  ],
+  "main": "bindings/node/index.js",
+  "types": "bindings/node/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./bindings/node/index.js",
+      "require": "./bindings/node/index.js",
+      "types": "./bindings/node/index.d.ts"
+    }
+  },
+  "files": [
+    "grammar.js",
+    "tree-sitter.json",
+    "binding.gyp",
+    "bindings/node/*",
+    "queries/*",
+    "src/**",
+    "*.wasm"
+  ],
+  "dependencies": {
+    "node-addon-api": "^8.5.0",
+    "node-gyp-build": "^4.8.4"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.25.10"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.25.0"
+  },
+  "peerDependenciesMeta": {
+    "tree-sitter": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "install": "node-gyp-build",
+    "test": "tree-sitter test",
+    "build": "tree-sitter build",
+    "build-wasm": "tree-sitter build --wasm",
+    "generate": "tree-sitter generate",
+    "parse": "tree-sitter parse",
+    "prebuild": "npm run generate",
+    "prepublishOnly": "npm run test && npm run build-wasm",
+    "version": "npm run build-wasm && git add *.wasm",
+    "postversion": "git push && git push --tags"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.craft",
+      "highlights": "queries/highlights.scm"
+    }
+  ]
+}
