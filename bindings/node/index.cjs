@@ -16,9 +16,9 @@ try {
   }
 } catch (_) {}
 
-// Named exports for compatibility
-module.exports = binding;
-module.exports.language = binding;
+// Named exports for compatibility  
+module.exports = binding.language;
+module.exports.language = binding.language;
 module.exports.nodeTypes = binding.nodeTypeInfo;
 module.exports.name = "tree-sitter-craft";
-module.exports.default = binding;
+module.exports.default = binding.language;
