@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-craft",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Tree-sitter grammar for Craft DSL - A domain-specific language for modeling business use cases and domain interactions",
   "type": "module",
   "author": "Tiago Carcao <tiago.carcao@example.com>",
