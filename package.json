@@ -24,12 +24,13 @@
     "modeling",
     "incremental-parsing"
   ],
-  "main": "bindings/node/index.js",
+  "main": "bindings/node/index.cjs",
+  "module": "bindings/node/index.js",
   "types": "bindings/node/index.d.ts",
   "exports": {
     ".": {
       "import": "./bindings/node/index.js",
-      "require": "./bindings/node/index.js",
+      "require": "./bindings/node/index.cjs",
       "types": "./bindings/node/index.d.ts"
     }
   },
