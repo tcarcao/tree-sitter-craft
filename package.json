@@ -32,7 +32,8 @@
       "import": "./bindings/node/index.js",
       "require": "./bindings/node/index.cjs",
       "types": "./bindings/node/index.d.ts"
-    }
+    },
+    "./tree-sitter-craft.wasm": "./tree-sitter-craft.wasm"
   },
   "files": [
     "grammar.js",
