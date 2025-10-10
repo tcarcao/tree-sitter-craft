@@ -736,7 +736,7 @@
                 "members": [
                   {
                     "type": "STRING",
-                    "value": "->"
+                    "value": ","
                   },
                   {
                     "type": "SYMBOL",
@@ -750,7 +750,7 @@
               "members": [
                 {
                   "type": "STRING",
-                  "value": "->"
+                  "value": ","
                 },
                 {
                   "type": "BLANK"
@@ -771,6 +771,10 @@
         {
           "type": "SYMBOL",
           "name": "percentage"
+        },
+        {
+          "type": "STRING",
+          "value": "->"
         },
         {
           "type": "SYMBOL",

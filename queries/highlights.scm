@@ -17,7 +17,7 @@
 "domains" @craft.domains-property
 "language" @craft.language-property
 "data-stores" @craft.data-stores-property
-"deployment" @craft.language-property
+"deployment" @craft.deployment-property
 "to" @craft.to-property
 "through" @craft.through-property
 "of" @craft.to-property
@@ -104,6 +104,11 @@
 ; Language values
 (language_property (identifier) @craft.language-value)
 
+; Deployment types and rules
+(deployment_type) @craft.deployment-type
+(deployment_rule (percentage) @craft.percentage)
+(deployment_rule (identifier) @craft.deployment-target)
+
 ; Phrase words - words in action phrases
 (phrase (identifier) @craft.phrase-word)
 (phrase (connector_word) @craft.phrase-word)
@@ -117,6 +122,9 @@
 ":" @craft.colon
 "," @craft.comma
 ">" @craft.flow-arrow
+"(" @craft.parenthesis
+")" @craft.parenthesis
+"->" @craft.deployment-arrow
 
 ; === MODIFIER VALUES (NON-IDENTIFIERS) ===
 ; Numbers and booleans in modifier context handled above

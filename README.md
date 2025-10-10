@@ -187,20 +187,27 @@ captures.forEach(({ name, node }) => {
 });
 ```
 
-## Testing
+## Testing the Grammar
 
 The grammar includes comprehensive tests covering:
 
 - ✅ Service definitions and properties
-- ✅ Use case modeling and flows  
+- ✅ Use case modeling and flows
 - ✅ Domain interactions and events
 - ✅ Architecture specifications
 - ✅ Error recovery and edge cases
 
-Run tests with:
+### Running Tests
 
 ```bash
+# Run all grammar tests
 npm test
+
+# Parse a specific file
+npx tree-sitter parse <file.craft>
+
+# Test with query files
+npx tree-sitter query <query-file> <file.craft> 
 ```
 
 ## Contributing

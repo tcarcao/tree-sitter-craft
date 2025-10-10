@@ -193,12 +193,13 @@ export default grammar({
 
     deployment_rules: $ => seq(
       '(',
-      sep1($.deployment_rule, '->'),
+      sep1($.deployment_rule, ','),
       ')',
     ),
 
     deployment_rule: $ => seq(
       $.percentage,
+      '->',
       $.identifier,
     ),
 

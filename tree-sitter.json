@@ -4,9 +4,7 @@
       "name": "craft",
       "scope": "source.craft",
       "file-types": ["craft"],
-      "source": {
-        "path": "."
-      }
+      "path": "."
     }
   ],
   "metadata": {

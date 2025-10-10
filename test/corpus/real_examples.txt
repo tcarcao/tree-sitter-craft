@@ -51,6 +51,90 @@ services {
           (identifier))))))
 
 ===
+Services with deployment strategies
+===
+
+services {
+    UserService {
+        domains: Authentication, Profile
+        data-stores: user_db
+        language: golang
+        deployment: blue_green
+    }
+    CommsService {
+        domains: Notifier
+        deployment: rolling(25% -> batch1, 25% -> batch2, 25% -> batch3, 25% -> batch4)
+    }
+    DummyService {
+        domains: Dummier
+        deployment: canary(20% -> staging, 80% -> production)
+    }
+}
+
+---
+
+(source_file
+  (services_block
+    (service_definition
+      (identifier)
+      (service_property
+        (domains_property
+          (identifier_list
+            (identifier)
+            (identifier))))
+      (service_property
+        (data_stores_property
+          (identifier_list
+            (identifier))))
+      (service_property
+        (language_property
+          (identifier)))
+      (service_property
+        (deployment_property
+          (deployment_spec
+            (deployment_type)))))
+    (service_definition
+      (identifier)
+      (service_property
+        (domains_property
+          (identifier_list
+            (identifier))))
+      (service_property
+        (deployment_property
+          (deployment_spec
+            (deployment_type)
+            (deployment_rules
+              (deployment_rule
+                (percentage)
+                (identifier))
+              (deployment_rule
+                (percentage)
+                (identifier))
+              (deployment_rule
+                (percentage)
+                (identifier))
+              (deployment_rule
+                (percentage)
+                (identifier)))))))
+    (service_definition
+      (identifier)
+      (service_property
+        (domains_property
+          (identifier_list
+            (identifier))))
+      (service_property
+        (deployment_property
+          (deployment_spec
+            (deployment_type)
+            (deployment_rules
+              (deployment_rule
+                (percentage)
+                (identifier))
+              (deployment_rule
+                (percentage)
+                (identifier)))))))))
+
+===
 User management arch
 ===
 
