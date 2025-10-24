@@ -261,3 +261,122 @@ domain User {
       (identifier))
     (subdomain
       (identifier))))
+
+===
+Return action with to clause
+===
+
+use_case "Order Processing" {
+    when Customer places order
+        OrderService validates the order details
+        OrderService returns to Customer the order confirmation
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (internal_action
+            (action_subject
+              (identifier))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier))))
+        (action
+          (return_action
+            (action_subject
+              (identifier))
+            (action_target
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier))))))))
+
+===
+Return action without to clause
+===
+
+use_case "Payment Processing" {
+    when User submits payment
+        PaymentService processes the payment
+        PaymentService returns a payment receipt
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (internal_action
+            (action_subject
+              (identifier))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier))))
+        (action
+          (return_action
+            (action_subject
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier))))))))
+
+===
+Return action without connector word
+===
+
+use_case "Data Retrieval" {
+    when System requests data
+        Database returns to System records
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (return_action
+            (action_subject
+              (identifier))
+            (action_target
+              (identifier))
+            (phrase
+              (identifier))))))))

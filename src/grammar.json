@@ -1657,6 +1657,14 @@
                 "value": "returns"
               },
               {
+                "type": "STRING",
+                "value": "to"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "action_target"
+              },
+              {
                 "type": "CHOICE",
                 "members": [
                   {
@@ -1671,14 +1679,6 @@
               {
                 "type": "SYMBOL",
                 "name": "phrase"
-              },
-              {
-                "type": "STRING",
-                "value": "to"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "action_target"
               }
             ]
           },

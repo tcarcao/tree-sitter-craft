@@ -407,15 +407,16 @@ export default grammar({
       $.phrase,
     )),
 
-    // Return action: domain returns phrase [to domain]
+    // Return action: domain returns [to domain] [connector_word] phrase
+    // ANTLR: domain 'returns' 'to' domain connector_word? phrase | domain 'returns' connector_word? phrase
     return_action: $ => prec.left(2, choice(
       seq(
         $.action_subject, // Source domain
         'returns',
+        'to',
+        $.action_target, // Target domain
         optional($.connector_word),
         $.phrase,
-        'to', // Specifically 'to' for returning to a domain
-        $.action_target, // Target domain
       ),
       seq(
         $.action_subject, // Source domain
