@@ -51,7 +51,7 @@
 ; === PROPERTIES AND CONTENT ===
 ; Service properties
 (service_property) @content.service-property
-(domains_property) @content.domains-property
+(service_contexts_property) @content.contexts-property
 (language_property) @content.language-property
 (data_stores_property) @content.data-stores-property
 (deployment_property) @content.deployment-property
@@ -69,13 +69,13 @@
   (domain_definition) @content.domain-def
 )
 
-; Subdomains
+; Bounded contexts
 (domain_block
-  (subdomain) @content.subdomain
+  (bounded_context) @content.bounded-context
 )
 
 (domain_definition
-  (subdomain) @content.subdomain
+  (bounded_context) @content.bounded-context
 )
 
 ; Exposure properties
@@ -84,7 +84,7 @@
 )
 (to_property) @content.exposure-to-property
 (through_property) @content.exposure-through-property
-(of_property) @content.exposure-of-property
+(exposure_contexts_property) @content.exposure-contexts-property
 
 ; Arch components
 (arch_component_list) @content.component-list

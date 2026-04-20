@@ -154,14 +154,14 @@ export default grammar({
 
     // ANTLR: service_property with correct property names
     service_property: $ => choice(
-      $.domains_property,
+      $.service_contexts_property,
       $.language_property,
       $.data_stores_property,
       $.deployment_property,
     ),
 
-    domains_property: $ => seq(
-      'domains',
+    service_contexts_property: $ => seq(
+      'contexts',
       ':',
       $.identifier_list,
     ),
@@ -204,13 +204,13 @@ export default grammar({
     ),
 
     // Domain definitions - ANTLR mapping
-    // ANTLR: domain_def: 'domain' domain_name '{' NEWLINE* subdomain_list '}' NEWLINE*;
+    // ANTLR: domain_def: 'domain' domain_name '{' NEWLINE* bounded_context_list '}' NEWLINE*;
     domain_block: $ => seq(
       'domain',
       $.identifier, // domain_name = IDENTIFIER
       '{',
       optional($._newline),
-      repeat(seq($.subdomain, optional($._newline))),
+      repeat(seq($.bounded_context, optional($._newline))),
       '}',
       repeat($._newline),
     ),
@@ -229,11 +229,11 @@ export default grammar({
       $.identifier,
       '{',
       optional($._newline),
-      repeat(seq($.subdomain, optional($._newline))),
+      repeat(seq($.bounded_context, optional($._newline))),
       '}',
     ),
 
-    subdomain: $ => $.identifier,
+    bounded_context: $ => $.identifier,
 
     // Actors definitions - following same pattern as domains/services
     // ANTLR: actor_def: 'actor' actor_type actor_name NEWLINE*;
@@ -279,8 +279,8 @@ export default grammar({
 
     exposure_property: $ => choice(
       $.to_property,
-      $.through_property, 
-      $.of_property,
+      $.through_property,
+      $.exposure_contexts_property,
     ),
 
     to_property: $ => seq(
@@ -295,8 +295,8 @@ export default grammar({
       $.identifier_list,
     ),
 
-    of_property: $ => seq(
-      'of',
+    exposure_contexts_property: $ => seq(
+      'contexts',
       ':',
       $.identifier_list,
     ),

@@ -4,12 +4,12 @@ Banking system services
 
 services {
   AccountService {
-    domains: AccountManagement, BalanceTracking
+    contexts: AccountManagement, BalanceTracking
     data-stores: account_db, transaction_log
     language: java
   }
   PaymentService {
-    domains: PaymentProcessing, TransactionValidation
+    contexts: PaymentProcessing, TransactionValidation
     data-stores: payment_db, fraud_detection_cache
     language: golang
   }
@@ -22,7 +22,7 @@ services {
     (service_definition
       (identifier)
       (service_property
-        (domains_property
+        (service_contexts_property
           (identifier_list
             (identifier)
             (identifier))))
@@ -37,7 +37,7 @@ services {
     (service_definition
       (identifier)
       (service_property
-        (domains_property
+        (service_contexts_property
           (identifier_list
             (identifier)
             (identifier))))
@@ -56,17 +56,17 @@ Services with deployment strategies
 
 services {
     UserService {
-        domains: Authentication, Profile
+        contexts: Authentication, Profile
         data-stores: user_db
         language: golang
         deployment: blue_green
     }
     CommsService {
-        domains: Notifier
+        contexts: Notifier
         deployment: rolling(25% -> batch1, 25% -> batch2, 25% -> batch3, 25% -> batch4)
     }
     DummyService {
-        domains: Dummier
+        contexts: Dummier
         deployment: canary(20% -> staging, 80% -> production)
     }
 }
@@ -78,7 +78,7 @@ services {
     (service_definition
       (identifier)
       (service_property
-        (domains_property
+        (service_contexts_property
           (identifier_list
             (identifier)
             (identifier))))
@@ -96,7 +96,7 @@ services {
     (service_definition
       (identifier)
       (service_property
-        (domains_property
+        (service_contexts_property
           (identifier_list
             (identifier))))
       (service_property
@@ -119,7 +119,7 @@ services {
     (service_definition
       (identifier)
       (service_property
-        (domains_property
+        (service_contexts_property
           (identifier_list
             (identifier))))
       (service_property
@@ -257,9 +257,9 @@ domain User {
 (source_file
   (domain_block
     (identifier)
-    (subdomain
+    (bounded_context
       (identifier))
-    (subdomain
+    (bounded_context
       (identifier))))
 
 ===
