@@ -40,3 +40,4 @@ test/actual/
 *.dylib
 *.dll
 *.pc.worktrees/
+.worktrees/
