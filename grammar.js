@@ -408,7 +408,6 @@ export default grammar({
     )),
 
     // Return action: domain returns [to domain] [connector_word] phrase
-    // ANTLR: domain 'returns' 'to' domain connector_word? phrase | domain 'returns' connector_word? phrase
     return_action: $ => prec.left(2, choice(
       seq(
         $.action_subject, // Source domain
