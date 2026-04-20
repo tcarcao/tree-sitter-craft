@@ -264,6 +264,21 @@
     "fields": {}
   },
   {
+    "type": "bounded_context",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "comment",
     "named": true,
     "extra": true,
@@ -450,11 +465,11 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "bounded_context",
           "named": true
         },
         {
-          "type": "subdomain",
+          "type": "identifier",
           "named": true
         }
       ]
@@ -469,11 +484,11 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "bounded_context",
           "named": true
         },
         {
-          "type": "subdomain",
+          "type": "identifier",
           "named": true
         }
       ]
@@ -514,21 +529,6 @@
     }
   },
   {
-    "type": "domains_property",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier_list",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "event_trigger",
     "named": true,
     "fields": {},
@@ -563,6 +563,21 @@
     }
   },
   {
+    "type": "exposure_contexts_property",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "exposure_property",
     "named": true,
     "fields": {},
@@ -571,7 +586,7 @@
       "required": true,
       "types": [
         {
-          "type": "of_property",
+          "type": "exposure_contexts_property",
           "named": true
         },
         {
@@ -757,21 +772,6 @@
     }
   },
   {
-    "type": "of_property",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier_list",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "phrase",
     "named": true,
     "fields": {},
@@ -894,6 +894,21 @@
     }
   },
   {
+    "type": "service_contexts_property",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "service_definition",
     "named": true,
     "fields": {},
@@ -933,11 +948,11 @@
           "named": true
         },
         {
-          "type": "domains_property",
+          "type": "language_property",
           "named": true
         },
         {
-          "type": "language_property",
+          "type": "service_contexts_property",
           "named": true
         }
       ]
@@ -1025,21 +1040,6 @@
     "type": "string",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "subdomain",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
-    }
   },
   {
     "type": "sync_action",
@@ -1272,6 +1272,10 @@
   },
   {
     "type": "canary",
+    "named": false
+  },
+  {
+    "type": "contexts",
     "named": false
   },
   {

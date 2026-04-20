@@ -592,7 +592,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "domains_property"
+          "name": "service_contexts_property"
         },
         {
           "type": "SYMBOL",
@@ -608,12 +608,12 @@
         }
       ]
     },
-    "domains_property": {
+    "service_contexts_property": {
       "type": "SEQ",
       "members": [
         {
           "type": "STRING",
-          "value": "domains"
+          "value": "contexts"
         },
         {
           "type": "STRING",
@@ -816,7 +816,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "subdomain"
+                "name": "bounded_context"
               },
               {
                 "type": "CHOICE",
@@ -936,7 +936,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "subdomain"
+                "name": "bounded_context"
               },
               {
                 "type": "CHOICE",
@@ -959,7 +959,7 @@
         }
       ]
     },
-    "subdomain": {
+    "bounded_context": {
       "type": "SYMBOL",
       "name": "identifier"
     },
@@ -1158,7 +1158,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "of_property"
+          "name": "exposure_contexts_property"
         }
       ]
     },
@@ -1196,12 +1196,12 @@
         }
       ]
     },
-    "of_property": {
+    "exposure_contexts_property": {
       "type": "SEQ",
       "members": [
         {
           "type": "STRING",
-          "value": "of"
+          "value": "contexts"
         },
         {
           "type": "STRING",

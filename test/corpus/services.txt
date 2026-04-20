@@ -4,7 +4,7 @@ Simple services block
 
 services {
     UserService {
-        domains: Authentication, Profile
+        contexts: Authentication, Profile
         language: golang
         data-stores: user_db, cache
     }
@@ -17,7 +17,7 @@ services {
     (service_definition
       (identifier)
       (service_property
-        (domains_property
+        (service_contexts_property
           (identifier_list (identifier) (identifier))))
       (service_property
         (language_property (identifier)))
@@ -31,11 +31,11 @@ Multiple services
 
 services {
     UserService {
-        domains: Authentication, Profile
+        contexts: Authentication, Profile
         language: golang
     }
     PaymentService {
-        domains: Payment
+        contexts: Payment
         language: java
     }
 }
@@ -47,14 +47,14 @@ services {
     (service_definition
       (identifier)
       (service_property
-        (domains_property
+        (service_contexts_property
           (identifier_list (identifier) (identifier))))
       (service_property
         (language_property (identifier))))
     (service_definition
       (identifier)
       (service_property
-        (domains_property
+        (service_contexts_property
           (identifier_list (identifier))))
       (service_property
         (language_property (identifier))))))

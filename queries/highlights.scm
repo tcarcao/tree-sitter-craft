@@ -14,13 +14,12 @@
 "when" @craft.flow-keyword
 
 ; === PROPERTY KEYWORDS ===
-"domains" @craft.domains-property
+"contexts" @craft.contexts-property
 "language" @craft.language-property
 "data-stores" @craft.data-stores-property
 "deployment" @craft.deployment-property
 "to" @craft.to-property
 "through" @craft.through-property
-"of" @craft.to-property
 
 ; === SECTION KEYWORDS ===
 "presentation" @craft.presentation-section
@@ -85,14 +84,17 @@
 ; Exposure names
 (exposure_block (identifier) @craft.exposure-name)
 
-; Subdomain names
-(subdomain (identifier) @craft.subdomain-name)
+; Bounded context names
+(bounded_context (identifier) @craft.context-name)
 
 ; Actor names in definitions
 (actor_name (identifier) @craft.actor-definition)
 
-; Domain list values (in domains property)
-(domains_property (identifier_list (identifier) @craft.domain-list))
+; Context list values (in service contexts property)
+(service_contexts_property (identifier_list (identifier) @craft.domain-list))
+
+; Context list values (in exposure contexts property)
+(exposure_contexts_property (identifier_list (identifier) @craft.domain-list))
 
 ; Data store names (in data-stores property)
 (data_stores_property (identifier_list (identifier) @craft.data-store-name))
