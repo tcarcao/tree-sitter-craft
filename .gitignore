@@ -39,4 +39,4 @@ test/actual/
 *.so.*
 *.dylib
 *.dll
-*.pc
+*.pc.worktrees/
