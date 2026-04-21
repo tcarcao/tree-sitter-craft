@@ -24,7 +24,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install tree-sitter CLI
-        run: pnpm add -g tree-sitter-cli
+        run: npm install -g tree-sitter-cli
 
       - name: Generate parser
         run: npm run generate
@@ -58,7 +58,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install tree-sitter CLI
-        run: pnpm add -g tree-sitter-cli
+        run: npm install -g tree-sitter-cli
 
       - name: Generate parser
         run: npm run generate
