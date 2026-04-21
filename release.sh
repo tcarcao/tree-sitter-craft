@@ -1,72 +1,73 @@
 #!/bin/bash
 
-# Tree-sitter Craft Release Script
-# Creates version tags to trigger automated GitHub Actions release
-
 set -e
 
-# Colors for output
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$REPO_ROOT"
+
 RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
 NC='\033[0m'
 
-# Check if we're in the right directory
-if [ ! -f "package.json" ] || [ ! -f "grammar.js" ]; then
-    echo -e "${RED}❌ Must be run from the tree-sitter-craft root directory${NC}"
-    exit 1
+info() { echo -e "${GREEN}[release]${NC} $*"; }
+warn() { echo -e "${YELLOW}[release]${NC} $*"; }
+err()  { echo -e "${RED}[release]${NC} $*"; }
+
+usage() {
+  echo "Usage: $0 <patch|minor|major>"
+  echo ""
+  echo "  patch   Bump patch version (e.g. 0.1.6 → 0.1.7)"
+  echo "  minor   Bump minor version (e.g. 0.1.6 → 0.2.0)"
+  echo "  major   Bump major version (e.g. 0.1.6 → 1.0.0)"
+  exit 0
+}
+
+BUMP="$1"
+case "$BUMP" in
+  patch|minor|major) ;;
+  -h|--help) usage ;;
+  *) err "Usage: $0 <patch|minor|major>"; exit 1 ;;
+esac
+
+# Must be on main
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+if [[ "$BRANCH" != "main" ]]; then
+  err "Not on main (current branch: $BRANCH). Release from main."
+  exit 1
 fi
 
-# Check if git is clean
-if [ -n "$(git status --porcelain)" ]; then
-    echo -e "${RED}❌ Working directory is not clean. Please commit or stash changes first.${NC}"
-    git status --short
-    exit 1
+# Clean working tree (allow untracked files)
+if ! git diff --quiet HEAD --; then
+  err "Working tree has uncommitted changes. Commit or stash them first."
+  git status -sb
+  exit 1
 fi
 
-# Get version argument
-VERSION=$1
-
-if [ -z "$VERSION" ]; then
-    echo -e "${RED}❌ Version required${NC}"
-    echo "Usage: $0 <version>"
-    echo "Examples:"
-    echo "  $0 0.2.0    # Create v0.2.0 release"
-    echo "  $0 1.0.0    # Create v1.0.0 release"
-    echo "  $0 1.1.0-beta.1  # Create v1.1.0-beta.1 pre-release"
-    exit 1
+# Check for unpulled commits
+if git rev-parse --verify origin/main &>/dev/null; then
+  AHEAD=$(git rev-list --count HEAD..origin/main)
+  if [[ "$AHEAD" -gt 0 ]]; then
+    warn "You are behind origin/main by $AHEAD commit(s). Consider: git pull --rebase origin main"
+    read -r -p "Continue anyway? [y/N] " r
+    [[ "${r,,}" != "y" && "${r,,}" != "yes" ]] && exit 1
+  fi
 fi
 
-# Validate version format (basic semver check)
-if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$ ]]; then
-    echo -e "${RED}❌ Invalid version format: $VERSION${NC}"
-    echo "Version must follow semver format: MAJOR.MINOR.PATCH[-prerelease]"
-    echo "Examples: 1.0.0, 1.2.3, 2.0.0-beta.1"
-    exit 1
-fi
+CURRENT_VERSION=$(node -p "require('./package.json').version")
+info "Current version: $CURRENT_VERSION  (bump: $BUMP)"
 
-TAG_NAME="v$VERSION"
+read -r -p "Proceed? [y/N] " r
+[[ "${r,,}" != "y" && "${r,,}" != "yes" ]] && { info "Aborted."; exit 0; }
 
-# Check if tag already exists
-if git tag -l | grep -q "^$TAG_NAME$"; then
-    echo -e "${RED}❌ Tag $TAG_NAME already exists${NC}"
-    exit 1
-fi
+info "Bumping version..."
+npm version "$BUMP" -m "v%s"
 
-echo -e "${BLUE}🏷️  Creating release tag: $TAG_NAME${NC}"
+info "Pushing main and tag..."
+git push origin main --follow-tags
 
-# Create and push tag
-git tag $TAG_NAME
-git push --tags
-
-echo -e "${GREEN}✅ Release $TAG_NAME created and pushed!${NC}"
+NEW_VERSION=$(node -p "require('./package.json').version")
 echo ""
-echo -e "${BLUE}🚀 GitHub Actions will now:${NC}"
-echo "  - Extract version from tag and update package.json"
-echo "  - Run tests"
-echo "  - Build WASM"
-echo "  - Publish to npm (if NPM_TOKEN is configured)"
-echo "  - Create GitHub release with artifacts"
-echo "  - Commit version bump back to main branch"
+info "Done. GitHub Actions will now publish tree-sitter-craft@${NEW_VERSION} to npm."
 echo ""
-echo -e "${BLUE}🔗 Monitor progress:${NC} https://github.com/tcarcao/tree-sitter-craft/actions"
+echo "Monitor: https://github.com/$(git remote get-url origin | sed -E 's/.*[:/]([^/]+\/[^/.]+)(\.git)?$/\1/')/actions"

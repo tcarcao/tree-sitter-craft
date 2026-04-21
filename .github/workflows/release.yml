@@ -5,160 +5,72 @@ on:
     tags:
       - 'v*'
 
-permissions:
-  contents: write
-  packages: write
-
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-      
+          node-version: lts/*
+          cache: pnpm
+
       - name: Install dependencies
-        run: npm install
-      
+        run: pnpm install --frozen-lockfile
+
       - name: Install tree-sitter CLI
-        run: npm install -g tree-sitter-cli
-      
+        run: pnpm add -g tree-sitter-cli
+
       - name: Generate parser
         run: npm run generate
-      
+
       - name: Run tests
         run: npm test
-      
-      - name: Build WASM
-        run: npm run build-wasm
 
-  publish-npm:
+  publish:
     needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: write
       id-token: write
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: '18'
-          registry-url: 'https://registry.npmjs.org'
-      
-      - name: Install dependencies
-        run: npm install
-      
-      - name: Install tree-sitter CLI
-        run: npm install -g tree-sitter-cli
-      
-      - name: Update package.json version from tag
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "Updating package.json to version: $VERSION"
-          npm version $VERSION --no-git-tag-version
-      
-      - name: Generate parser
-        run: npm run generate
-      
-      - name: Build WASM
-        run: npm run build-wasm
-      
-      - name: Publish to npm
-        run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
-      - name: Commit version bump back to repository
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add package.json
-          git commit -m "chore: bump version to $VERSION [skip ci]" || echo "No changes to commit"
-          git push origin HEAD:main || echo "Failed to push, continuing..."
-
-  create-release:
-    needs: test
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
+        with:
+          fetch-depth: 0
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-      
+          node-version: lts/*
+          cache: pnpm
+          registry-url: 'https://registry.npmjs.org'
+
       - name: Install dependencies
-        run: npm install
-      
+        run: pnpm install --frozen-lockfile
+
       - name: Install tree-sitter CLI
-        run: npm install -g tree-sitter-cli
-      
-      - name: Update package.json version from tag
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "Updating package.json to version: $VERSION"
-          npm version $VERSION --no-git-tag-version
-      
+        run: pnpm add -g tree-sitter-cli
+
       - name: Generate parser
         run: npm run generate
-      
-      - name: Build WASM
-        run: npm run build-wasm
-      
-      - name: Create tarball
-        run: npm pack
-      
-      - name: Get package info
-        id: package
+
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+
+      - name: Create GitHub Release
         run: |
-          echo "name=$(node -p "require('./package.json').name")" >> $GITHUB_OUTPUT
-          echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-      
-      - name: Create Release
-        uses: actions/create-release@v1
-        id: create_release
+          VERSION=$(node -p "require('./package.json').version")
+          gh release create "v${VERSION}" \
+            --title "v${VERSION}" \
+            --generate-notes
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            ## Changes
-            
-            See the [changelog](./CHANGELOG.md) for details.
-            
-            ## Assets
-            
-            - 📦 **npm package**: `npm install ${{ steps.package.outputs.name }}@${{ steps.package.outputs.version }}`
-            - 🌐 **WASM module**: `tree-sitter-craft.wasm` (attached below)
-            - 📋 **Source tarball**: `${{ steps.package.outputs.name }}-${{ steps.package.outputs.version }}.tgz` (attached below)
-          draft: false
-          prerelease: false
-      
-      - name: Upload WASM Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./tree-sitter-craft.wasm
-          asset_name: tree-sitter-craft.wasm
-          asset_content_type: application/wasm
-      
-      - name: Upload NPM Package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.package.outputs.name }}-${{ steps.package.outputs.version }}.tgz
-          asset_name: ${{ steps.package.outputs.name }}-${{ steps.package.outputs.version }}.tgz
-          asset_content_type: application/gzip
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
