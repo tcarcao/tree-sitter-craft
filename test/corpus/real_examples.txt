@@ -92,7 +92,8 @@ services {
       (service_property
         (deployment_property
           (deployment_spec
-            (deployment_type)))))
+            (deployment_type
+              (identifier))))))
     (service_definition
       (identifier)
       (service_property
@@ -102,7 +103,8 @@ services {
       (service_property
         (deployment_property
           (deployment_spec
-            (deployment_type)
+            (deployment_type
+              (identifier))
             (deployment_rules
               (deployment_rule
                 (percentage)
@@ -125,7 +127,8 @@ services {
       (service_property
         (deployment_property
           (deployment_spec
-            (deployment_type)
+            (deployment_type
+              (identifier))
             (deployment_rules
               (deployment_rule
                 (percentage)

@@ -127,7 +127,17 @@
   {
     "type": "actor_type",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "actors_block",
@@ -454,7 +464,17 @@
   {
     "type": "deployment_type",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "domain_block",
@@ -766,6 +786,10 @@
         },
         {
           "type": "number",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         }
       ]
@@ -1263,15 +1287,7 @@
     "named": false
   },
   {
-    "type": "blue_green",
-    "named": false
-  },
-  {
     "type": "by",
-    "named": false
-  },
-  {
-    "type": "canary",
     "named": false
   },
   {
@@ -1359,19 +1375,11 @@
     "named": false
   },
   {
-    "type": "rolling",
-    "named": false
-  },
-  {
     "type": "service",
     "named": false
   },
   {
     "type": "services",
-    "named": false
-  },
-  {
-    "type": "system",
     "named": false
   },
   {
@@ -1392,10 +1400,6 @@
   },
   {
     "type": "use_case",
-    "named": false
-  },
-  {
-    "type": "user",
     "named": false
   },
   {

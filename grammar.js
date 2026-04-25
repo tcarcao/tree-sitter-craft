@@ -3,7 +3,8 @@ export default grammar({
   name: 'craft',
 
   extras: $ => [
-    /[ \t]/,  // Only spaces and tabs, NOT newlines
+    /[ \t]/,
+    $._newline,
     $.comment,
   ],
 
@@ -116,7 +117,8 @@ export default grammar({
 
     // Specific node types for modifiers (hybrid approach)
     modifier_key: $ => $.identifier,
-    modifier_value: $ => choice($.identifier, $.number, $.boolean),
+    // Q7: modifier_value now accepts strings in addition to identifiers/numbers/booleans
+    modifier_value: $ => choice($.identifier, $.number, $.boolean, $.string),
 
     // ANTLR: simple_component: component_with_modifiers;
     simple_component: $ => $.component_with_modifiers,
@@ -189,7 +191,8 @@ export default grammar({
       seq($.deployment_type, $.deployment_rules),
     ),
 
-    deployment_type: $ => choice('canary', 'blue_green', 'rolling'),
+    // Q6: deployment_type is now open (any identifier)
+    deployment_type: $ => $.identifier,
 
     deployment_rules: $ => seq(
       '(',
@@ -260,8 +263,8 @@ export default grammar({
       $.actor_name,
     ),
 
-    // ANTLR: actor_type: 'user' | 'system' | 'service';
-    actor_type: $ => choice('user', 'system', 'service'),
+    // Q5: actor_type is now open (any identifier)
+    actor_type: $ => $.identifier,
 
     // ANTLR: actor_name: IDENTIFIER;
     actor_name: $ => $.identifier,
@@ -444,7 +447,8 @@ export default grammar({
     // Common elements - from backup
     identifier_list: $ => sep1($.identifier, ','),
 
-    identifier: $ => /[a-zA-Z_][a-zA-Z0-9_-]*/,
+    // Q9: identifiers now allow dots (e.g. my.service)
+    identifier: $ => /[a-zA-Z0-9_][a-zA-Z0-9_.-]*/,
 
     string: $ => seq(
       '"',

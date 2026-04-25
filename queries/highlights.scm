@@ -32,9 +32,7 @@
 "returns" @craft.returns-verb
 
 ; === ACTOR TYPES ===
-"user" @craft.actor-type
-"system" @craft.actor-type
-"service" @craft.actor-type
+(actor_type (identifier) @craft.actor-type)
 
 ; === CONNECTOR WORDS ===
 ; Connector words in phrases should be colored as phrase words
@@ -64,6 +62,7 @@
 (modifier_value (identifier) @craft.modifier-value)
 (modifier_value (number) @craft.modifier-value)
 (modifier_value (boolean) @craft.modifier-value)
+(modifier_value (string) @craft.modifier-value)
 
 ; Action context (hybrid approach)
 (action_subject (identifier) @craft.service-name)
@@ -107,7 +106,7 @@
 (language_property (identifier) @craft.language-value)
 
 ; Deployment types and rules
-(deployment_type) @craft.deployment-type
+(deployment_type (identifier) @craft.deployment-type)
 (deployment_rule (percentage) @craft.percentage)
 (deployment_rule (identifier) @craft.deployment-target)
 
