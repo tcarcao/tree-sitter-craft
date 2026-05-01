@@ -5,6 +5,7 @@ export default grammar({
   extras: $ => [
     /[ \t]/,
     $._newline,
+    $.doc_comment,
     $.comment,
   ],
 
@@ -465,8 +466,10 @@ export default grammar({
 
     boolean: $ => choice('true', 'false'),
 
+    doc_comment: $ => /\/\/\/[^\n]*/,
+
     comment: $ => choice(
-      seq('//', /.*/),
+      /\/\/[^\n]*/,
       seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/'),
     ),
 
