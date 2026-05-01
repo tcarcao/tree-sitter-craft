@@ -383,3 +383,15 @@ use_case "Data Retrieval" {
               (identifier))
             (phrase
               (identifier))))))))
+
+===
+Import statement
+===
+
+import "other.craft"
+
+---
+
+(source_file
+  (import_decl
+    (string)))
