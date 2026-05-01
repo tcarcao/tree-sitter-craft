@@ -368,10 +368,10 @@ export default grammar({
       $.string, // Event
     ),
 
-    cron_trigger: $ => prec.left(seq(
-      'CRON',
-      optional($.phrase),
-    )),
+    cron_trigger: $ => choice(
+      seq('cron', $.string),   // when cron "0 * * * *"
+      seq('every', $.string),  // when every "1h"
+    ),
 
     action: $ => choice(
       $.sync_action,
