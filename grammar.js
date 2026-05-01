@@ -18,8 +18,9 @@ export default grammar({
 
     // Map ANTLR top level items to working backup names
     _top_level_item: $ => choice(
+      $.import_decl,     // import statement
       $.arch_block,      // maps to ANTLR 'arch'
-      $.services_block,  // maps to ANTLR 'services_def' 
+      $.services_block,  // maps to ANTLR 'services_def'
       $.service_block,   // maps to ANTLR 'service_def'
       $.domain_block,    // maps to ANTLR 'domain_def'
       $.domains_block,   // maps to ANTLR 'domains_def'
@@ -27,6 +28,12 @@ export default grammar({
       $.actor_block,     // maps to ANTLR 'actor_def'
       $.exposure_block,  // maps to ANTLR 'exposure'
       $.use_case_block,  // maps to ANTLR 'use_case'
+    ),
+
+    // Import statement
+    import_decl: $ => seq(
+      'import',
+      $.string,
     ),
 
     // Architecture - use working backup structure with ANTLR precision
