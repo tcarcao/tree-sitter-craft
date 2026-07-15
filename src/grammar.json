@@ -63,6 +63,145 @@
         {
           "type": "SYMBOL",
           "name": "use_case_block"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "context_map_block"
+        }
+      ]
+    },
+    "context_map_block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "context_map"
+        },
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_newline"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "edge_stmt"
+              },
+              {
+                "type": "REPEAT1",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_newline"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_newline"
+          }
+        }
+      ]
+    },
+    "edge_stmt": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "ref"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "edge_verb"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "ref"
+        }
+      ]
+    },
+    "edge_verb": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "realized_by"
+        },
+        {
+          "type": "STRING",
+          "value": "also_realizes"
+        },
+        {
+          "type": "STRING",
+          "value": "same_as"
+        },
+        {
+          "type": "STRING",
+          "value": "contrasts"
+        },
+        {
+          "type": "STRING",
+          "value": "distinct_from"
+        }
+      ]
+    },
+    "ref": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "slug"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ref_kind"
+            },
+            {
+              "type": "STRING",
+              "value": ":"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "slug"
+            }
+          ]
+        }
+      ]
+    },
+    "ref_kind": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "STRING",
+          "value": "service"
+        },
+        {
+          "type": "STRING",
+          "value": "domain"
         }
       ]
     },
@@ -626,6 +765,48 @@
         {
           "type": "SYMBOL",
           "name": "deployment_property"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "opslevel_property"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "repo_property"
+        }
+      ]
+    },
+    "opslevel_property": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "opslevel"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        }
+      ]
+    },
+    "repo_property": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "repo"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "ref"
         }
       ]
     },
@@ -1614,8 +1795,17 @@
           "value": "listens"
         },
         {
-          "type": "SYMBOL",
-          "name": "string"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "string"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "ref"
+            }
+          ]
         }
       ]
     },
@@ -1738,8 +1928,17 @@
           "value": "notifies"
         },
         {
-          "type": "SYMBOL",
-          "name": "string"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "string"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "ref"
+            }
+          ]
         }
       ]
     },
@@ -1857,7 +2056,7 @@
     },
     "action_target": {
       "type": "SYMBOL",
-      "name": "identifier"
+      "name": "ref"
     },
     "action_verb": {
       "type": "SYMBOL",
@@ -1939,8 +2138,27 @@
             {
               "type": "SYMBOL",
               "name": "connector_word"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "number"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_prose_atom"
             }
           ]
+        }
+      }
+    },
+    "_prose_atom": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": -1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[^\\s{}\"]+"
         }
       }
     },
