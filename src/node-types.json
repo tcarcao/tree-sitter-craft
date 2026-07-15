@@ -369,10 +369,10 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "phrase",
+          "type": "string",
           "named": true
         }
       ]
@@ -672,6 +672,21 @@
       "types": [
         {
           "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "import_decl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
           "named": true
         }
       ]
@@ -1046,6 +1061,10 @@
           "named": true
         },
         {
+          "type": "import_decl",
+          "named": true
+        },
+        {
           "type": "service_block",
           "named": true
         },
@@ -1231,19 +1250,11 @@
     "named": false
   },
   {
-    "type": "//",
-    "named": false
-  },
-  {
     "type": ":",
     "named": false
   },
   {
     "type": ">",
-    "named": false
-  },
-  {
-    "type": "CRON",
     "named": false
   },
   {
@@ -1295,6 +1306,10 @@
     "named": false
   },
   {
+    "type": "cron",
+    "named": false
+  },
+  {
     "type": "data-stores",
     "named": false
   },
@@ -1303,11 +1318,20 @@
     "named": false
   },
   {
+    "type": "doc_comment",
+    "named": true,
+    "extra": true
+  },
+  {
     "type": "domain",
     "named": false
   },
   {
     "type": "domains",
+    "named": false
+  },
+  {
+    "type": "every",
     "named": false
   },
   {
@@ -1333,6 +1357,10 @@
   {
     "type": "identifier",
     "named": true
+  },
+  {
+    "type": "import",
+    "named": false
   },
   {
     "type": "in",

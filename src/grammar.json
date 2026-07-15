@@ -26,6 +26,10 @@
       "members": [
         {
           "type": "SYMBOL",
+          "name": "import_decl"
+        },
+        {
+          "type": "SYMBOL",
           "name": "arch_block"
         },
         {
@@ -59,6 +63,19 @@
         {
           "type": "SYMBOL",
           "name": "use_case_block"
+        }
+      ]
+    },
+    "import_decl": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "import"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "string"
         }
       ]
     },
@@ -1467,29 +1484,35 @@
       ]
     },
     "cron_trigger": {
-      "type": "PREC_LEFT",
-      "value": 0,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "CRON"
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "phrase"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          }
-        ]
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "cron"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "string"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "every"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "string"
+            }
+          ]
+        }
+      ]
     },
     "action": {
       "type": "CHOICE",
@@ -1876,21 +1899,16 @@
         }
       ]
     },
+    "doc_comment": {
+      "type": "PATTERN",
+      "value": "\\/\\/\\/[^\\n]*"
+    },
     "comment": {
       "type": "CHOICE",
       "members": [
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "//"
-            },
-            {
-              "type": "PATTERN",
-              "value": ".*"
-            }
-          ]
+          "type": "PATTERN",
+          "value": "\\/\\/[^\\n]*"
         },
         {
           "type": "SEQ",
@@ -1924,6 +1942,10 @@
     {
       "type": "SYMBOL",
       "name": "_newline"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "doc_comment"
     },
     {
       "type": "SYMBOL",
