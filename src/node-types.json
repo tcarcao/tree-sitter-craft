@@ -1028,6 +1028,21 @@
     }
   },
   {
+    "type": "slug",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "root": true,
@@ -1112,6 +1127,51 @@
     }
   },
   {
+    "type": "tag_stmt",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "slug",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "tags_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "tag_stmt",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "through_property",
     "named": true,
     "fields": {},
@@ -1185,6 +1245,10 @@
         },
         {
           "type": "string",
+          "named": true
+        },
+        {
+          "type": "tags_block",
           "named": true
         }
       ]
@@ -1408,6 +1472,10 @@
   },
   {
     "type": "services",
+    "named": false
+  },
+  {
+    "type": "tags",
     "named": false
   },
   {
