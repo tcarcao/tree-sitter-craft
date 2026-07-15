@@ -16,6 +16,7 @@
 (domain_definition "{" @brace.open) @block.domain-def
 (exposure_block "{" @brace.open) @block.exposure
 (actors_block "{" @brace.open) @block.actors
+(tags_block "{" @brace.open) @block.tags
 
 ; === BLOCK CLOSERS ===
 (services_block "}" @brace.close)
@@ -28,6 +29,7 @@
 (domain_definition "}" @brace.close)
 (exposure_block "}" @brace.close)
 (actors_block "}" @brace.close)
+(tags_block "}" @brace.close)
 
 ; === ARCH SECTIONS ===
 ; Arch sections
@@ -67,6 +69,14 @@
 ; Domain definitions
 (domains_block
   (domain_definition) @content.domain-def
+)
+
+; Tags block (use_case tags {} block)
+(use_case_block
+  (tags_block) @content.tags-block
+)
+(tags_block
+  (tag_stmt) @content.tag-stmt
 )
 
 ; Bounded contexts

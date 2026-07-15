@@ -395,3 +395,51 @@ import "other.craft"
 (source_file
   (import_decl
     (string)))
+
+===
+Use case with tags block
+===
+
+use_case "Renewal" {
+  tags {
+    journey: re/renewal-flow
+    owner: "team billing"
+    tier: gold
+  }
+
+  when Customer creates Account
+    Billing notifies "Account Created"
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (tags_block
+      (tag_stmt
+        key: (identifier)
+        value: (slug
+          (identifier)
+          (identifier)))
+      (tag_stmt
+        key: (identifier)
+        value: (string))
+      (tag_stmt
+        key: (identifier)
+        value: (slug
+          (identifier))))
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (async_action
+            (action_subject
+              (identifier))
+            (string)))))))

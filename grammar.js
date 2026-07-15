@@ -317,9 +317,48 @@ export default grammar({
       $.string,
       '{',
       repeat1($._newline),
+      optional(seq($.tags_block, repeat1($._newline))),
       $.scenario,
       '}',
       repeat($._newline),
+    ),
+
+    // Q11 (Task 6 / Slice D): `tags { }` sub-block on use_case, mirroring the
+    // Go parser's `IDENT ':' (IDENT | STRING | ref-shaped-slug)` tag lines
+    // (see craft repo internal/syntax/parser.go parseTagStmt). `tags` is kept
+    // a bare string literal in the seq — a contextual keyword, same as
+    // `when`/`use_case` elsewhere in this grammar — not a reserved word.
+    tags_block: $ => seq(
+      'tags',
+      '{',
+      optional($._newline),
+      repeat(seq($.tag_stmt, optional($._newline))),
+      '}',
+    ),
+
+    tag_stmt: $ => seq(
+      field('key', $.identifier),
+      ':',
+      field('value', choice($.string, $.slug)),
+    ),
+
+    // Bare tag value: one or more identifier-shaped segments joined by '/',
+    // e.g. `gold` (single segment) or `re/renewal-flow` (slug). Mirrors the
+    // shape the Go parser's parseRef captures for bare ref/slug values
+    // (ident ('/' ident)*) — there is no existing tree-sitter rule for this
+    // shape yet (context_map/refs are not mirrored into this grammar as of
+    // this baseline), so this is the first tree-sitter rule for it.
+    //
+    // Kept as a visible node (not hidden with a leading `_`) rather than the
+    // task brief's literal `_slug_value` suggestion: a hidden rule here would
+    // make `field('value', ...)` attach separately to *each* identifier
+    // segment of a multi-segment slug (two `value:` children for one tag
+    // line), which is confusing for consumers. Wrapping every bare value —
+    // single segment or slug — in one `slug` node gives a uniform, single
+    // `value:` child regardless of segment count.
+    slug: $ => seq(
+      $.identifier,
+      repeat(seq('/', $.identifier)),
     ),
 
     scenario_continuation: $ => choice(

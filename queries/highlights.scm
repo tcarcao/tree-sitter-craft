@@ -12,6 +12,7 @@
 "actor" @craft.actor-keyword
 "use_case" @craft.flow-keyword
 "when" @craft.flow-keyword
+"tags" @craft.tags-keyword
 
 ; === PROPERTY KEYWORDS ===
 "contexts" @craft.contexts-property
@@ -57,12 +58,17 @@
 ; Component names (hybrid approach)
 (component_name (identifier) @craft.component-name)
 
-; Modifier keys and values (hybrid approach)  
+; Modifier keys and values (hybrid approach)
 (modifier_key (identifier) @craft.modifier-key)
 (modifier_value (identifier) @craft.modifier-value)
 (modifier_value (number) @craft.modifier-value)
 (modifier_value (boolean) @craft.modifier-value)
 (modifier_value (string) @craft.modifier-value)
+
+; Tag keys and values (use_case tags {} block — mirrors modifier_key/value)
+(tag_stmt key: (identifier) @craft.tag-key)
+(tag_stmt value: (string) @craft.tag-value)
+(tag_stmt value: (slug (identifier) @craft.tag-value))
 
 ; Action context (hybrid approach)
 (action_subject (identifier) @craft.service-name)
