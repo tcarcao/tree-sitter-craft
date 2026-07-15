@@ -1,4 +1,4 @@
-name: Corpus Compatibility (Warning-only)
+name: Corpus Compatibility
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
         run: npm run generate
 
       - name: Fetch Craft corpus
-        run: bash scripts/fetch-corpus.sh || echo "::warning::Corpus fetch failed (check CORPUS_VERSION points to a real craft tag) — parse check will be skipped."
+        run: bash scripts/fetch-corpus.sh
 
       - name: Parse corpus files
         run: |
@@ -35,8 +35,8 @@ jobs:
           CORPUS_DIR="test/corpus-from-craft"
 
           if [[ ! -d "$CORPUS_DIR" ]]; then
-            echo "No corpus directory found at $CORPUS_DIR — skipping parse check."
-            exit 0
+            echo "::error::No corpus directory found at $CORPUS_DIR — fetch step must populate it."
+            exit 1
           fi
 
           while IFS= read -r -d '' file; do
@@ -50,17 +50,16 @@ jobs:
 
           if [[ ${#FAILED[@]} -gt 0 ]]; then
             echo ""
-            echo "::warning::Corpus compatibility drift: ${#FAILED[@]} of ${TOTAL} files could not be parsed by the tree-sitter grammar."
+            echo "::error::Corpus compatibility FAILED: ${#FAILED[@]} of ${TOTAL} files could not be parsed by the tree-sitter grammar."
             echo "UNPARSED (${#FAILED[@]}):"
             for f in "${FAILED[@]}"; do
               echo "  $f"
               tree-sitter parse "$f" 2>&1 | head -5 || true
             done
             echo ""
-            echo "This grammar is a deliberate partial mirror of the Craft language;"
-            echo "forward-looking corpus files (e.g. context_map, typed refs) are expected to lag."
-            echo "This check is warning-only and does not fail the build."
-            exit 0
+            echo "The tree-sitter grammar must parse the full Craft corpus at CORPUS_VERSION."
+            echo "Update grammar.js to handle these constructs before merging."
+            exit 1
           fi
 
           echo "All ${TOTAL} corpus files parsed successfully."
