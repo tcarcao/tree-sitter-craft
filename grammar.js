@@ -492,7 +492,13 @@ export default grammar({
     ))),
 
     // Common elements - from backup
-    identifier_list: $ => sep1($.identifier, ','),
+    // Allows continuation lines: items may be separated by comma + optional newlines.
+    // Trailing commas are NOT supported in tree-sitter (syntax highlighting only);
+    // the authoritative ANTLR parser handles them.
+    identifier_list: $ => seq(
+      $.identifier,
+      repeat(seq(',', repeat($._newline), $.identifier)),
+    ),
 
     // Q9: identifiers now allow dots (e.g. my.service)
     identifier: $ => /[a-zA-Z0-9_][a-zA-Z0-9_.-]*/,

@@ -26,6 +26,55 @@ services {
           (identifier_list (identifier) (identifier)))))))
 
 ===
+Multi-line contexts list
+===
+
+services {
+    AccountService {
+        contexts: RegistrationApplication, AccountManagement,
+            AccountSettings, AccountNote
+        language: golang
+    }
+}
+
+---
+
+(source_file
+  (services_block
+    (service_definition
+      (identifier)
+      (service_property
+        (service_contexts_property
+          (identifier_list (identifier) (identifier) (identifier) (identifier))))
+      (service_property
+        (language_property (identifier))))))
+
+===
+Multi-line data-stores list
+===
+
+services {
+    DataService {
+        contexts: Payments
+        data-stores: primary_db, replica_db,
+            cache, event_store
+    }
+}
+
+---
+
+(source_file
+  (services_block
+    (service_definition
+      (identifier)
+      (service_property
+        (service_contexts_property
+          (identifier_list (identifier))))
+      (service_property
+        (data_stores_property
+          (identifier_list (identifier) (identifier) (identifier) (identifier)))))))
+
+===
 Multiple services
 ===
 

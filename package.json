@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-craft",
-  "version": "0.1.6",
+  "version": "0.1.10",
   "description": "Tree-sitter grammar for Craft DSL - A domain-specific language for modeling business use cases and domain interactions",
   "type": "module",
   "author": "Tiago Carcao <tiago.carcao@example.com>",
@@ -48,9 +48,7 @@
     "node-addon-api": "^8.5.0",
     "node-gyp-build": "^4.8.4"
   },
-  "devDependencies": {
-    "tree-sitter-cli": "^0.25.10"
-  },
+  "devDependencies": {},
   "peerDependencies": {
     "tree-sitter": "^0.25.0"
   },
@@ -67,8 +65,7 @@
     "generate": "tree-sitter generate",
     "parse": "tree-sitter parse",
     "prebuild": "npm run generate",
-    "prepublishOnly": "npm run test && npm run build-wasm",
-    "version": "npm run build-wasm && git add -f *.wasm"
+    "prepublishOnly": "npm run test && npm run build-wasm"
   },
   "engines": {
     "node": ">=16.0.0"
