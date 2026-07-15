@@ -1,0 +1,64 @@
+name: Corpus Compatibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  compat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install tree-sitter CLI
+        run: npm install -g tree-sitter-cli
+
+      - name: Generate parser
+        run: npm run generate
+
+      - name: Fetch Craft corpus
+        run: bash scripts/fetch-corpus.sh
+
+      - name: Parse corpus files
+        run: |
+          FAILED=()
+          CORPUS_DIR="test/corpus-from-craft"
+
+          if [[ ! -d "$CORPUS_DIR" ]]; then
+            echo "No corpus directory found at $CORPUS_DIR — skipping parse check."
+            exit 0
+          fi
+
+          while IFS= read -r -d '' file; do
+            if ! tree-sitter parse "$file" > /dev/null 2>&1; then
+              FAILED+=("$file")
+            fi
+          done < <(find "$CORPUS_DIR" -name '*.craft' -print0 | sort -z)
+
+          TOTAL="$(find "$CORPUS_DIR" -name '*.craft' | wc -l | tr -d ' ')"
+          echo "Parsed ${TOTAL} corpus files."
+
+          if [[ ${#FAILED[@]} -gt 0 ]]; then
+            echo ""
+            echo "FAILED (${#FAILED[@]}):"
+            for f in "${FAILED[@]}"; do
+              echo "  $f"
+              tree-sitter parse "$f" 2>&1 | head -5 || true
+            done
+            echo ""
+            echo "Corpus compatibility check failed: ${#FAILED[@]} of ${TOTAL} files could not be parsed."
+            echo "Update grammar.js to handle these constructs before merging."
+            exit 1
+          fi
+
+          echo "All ${TOTAL} corpus files parsed successfully."
