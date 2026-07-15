@@ -304,7 +304,9 @@ use_case "Order Processing" {
             (action_subject
               (identifier))
             (action_target
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (connector_word)
             (phrase
               (identifier)
@@ -380,7 +382,9 @@ use_case "Data Retrieval" {
             (action_subject
               (identifier))
             (action_target
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (phrase
               (identifier))))))))
 
@@ -443,3 +447,119 @@ use_case "Renewal" {
             (action_subject
               (identifier))
             (string)))))))
+
+===
+Context map block with typed refs and edges
+===
+
+context_map {
+  bc:re/subscriptions realized_by service:subscriptions-api
+  term:subscriptions/dunning contrasts term:billing/dunning
+}
+
+---
+
+(source_file
+  (context_map_block
+    (edge_stmt
+      (ref
+        (ref_kind
+          (identifier))
+        (slug
+          (identifier)
+          (identifier)))
+      (edge_verb)
+      (ref
+        (ref_kind)
+        (slug
+          (identifier))))
+    (edge_stmt
+      (ref
+        (ref_kind
+          (identifier))
+        (slug
+          (identifier)
+          (identifier)))
+      (edge_verb)
+      (ref
+        (ref_kind
+          (identifier))
+        (slug
+          (identifier)
+          (identifier))))))
+
+===
+Service with opslevel and repo
+===
+
+services {
+  SubscriptionsApi {
+    opslevel: subscriptions-api
+    repo: olxeu/realestate/subscriptions
+  }
+}
+
+---
+
+(source_file
+  (services_block
+    (service_definition
+      (identifier)
+      (service_property
+        (opslevel_property
+          (identifier)))
+      (service_property
+        (repo_property
+          (ref
+            (slug
+              (identifier)
+              (identifier)
+              (identifier))))))))
+
+===
+Listens bare event, asks typed ref with prose, notifies bare event
+===
+
+use_case "Bare listen" {
+  when Subscriptions listens vas.VasApplied
+    Subscriptions asks bc:re/billing for a fresh charge attempt (1! & 2!)
+    Subscriptions notifies vas.VasFulfilled
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (domain_listener
+          (identifier)
+          (ref
+            (slug
+              (identifier))))
+        (action
+          (sync_action
+            (action_subject
+              (identifier))
+            (action_target
+              (ref
+                (ref_kind
+                  (identifier))
+                (slug
+                  (identifier)
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (identifier)
+              (identifier)
+              (identifier))))
+        (action
+          (async_action
+            (action_subject
+              (identifier))
+            (ref
+              (slug
+                (identifier)))))))))

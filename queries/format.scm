@@ -17,6 +17,7 @@
 (exposure_block "{" @brace.open) @block.exposure
 (actors_block "{" @brace.open) @block.actors
 (tags_block "{" @brace.open) @block.tags
+(context_map_block "{" @brace.open) @block.context-map
 
 ; === BLOCK CLOSERS ===
 (services_block "}" @brace.close)
@@ -30,6 +31,7 @@
 (exposure_block "}" @brace.close)
 (actors_block "}" @brace.close)
 (tags_block "}" @brace.close)
+(context_map_block "}" @brace.close)
 
 ; === ARCH SECTIONS ===
 ; Arch sections
@@ -123,6 +125,15 @@
 ; Trigger components
 (trigger_actor) @content.trigger-actor
 (trigger_verb) @content.trigger-verb
+
+; === CONTEXT MAP ===
+(context_map_block
+  (edge_stmt) @content.edge-stmt
+)
+(edge_stmt
+  (edge_verb) @content.edge-verb
+)
+(ref) @content.ref
 
 ; === COMMON ELEMENTS ===
 (connector_word) @content.connector-word

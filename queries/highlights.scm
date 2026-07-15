@@ -13,6 +13,7 @@
 "use_case" @craft.flow-keyword
 "when" @craft.flow-keyword
 "tags" @craft.tags-keyword
+"context_map" @craft.context-map-keyword
 
 ; === PROPERTY KEYWORDS ===
 "contexts" @craft.contexts-property
@@ -21,6 +22,8 @@
 "deployment" @craft.deployment-property
 "to" @craft.to-property
 "through" @craft.through-property
+"opslevel" @craft.opslevel-property
+"repo" @craft.repo-property
 
 ; === SECTION KEYWORDS ===
 "presentation" @craft.presentation-section
@@ -31,6 +34,18 @@
 "notifies" @craft.notifies-verb
 "listens" @craft.listens-verb
 "returns" @craft.returns-verb
+
+; === EDGE VERBS (context_map) ===
+(edge_verb) @craft.edge-verb
+
+; === REFERENCES ===
+; Typed-ref kind (bc / term / service / domain)
+(ref_kind) @craft.ref-kind
+; opslevel / repo property values (ref-shaped)
+(opslevel_property (identifier) @craft.regular-string)
+(repo_property (ref (slug (identifier) @craft.regular-string)))
+; Action target refs (asks <ref>) — replaces the old plain-identifier capture
+(action_target (ref (slug (identifier) @craft.service-name)))
 
 ; === ACTOR TYPES ===
 (actor_type (identifier) @craft.actor-type)
@@ -72,7 +87,6 @@
 
 ; Action context (hybrid approach)
 (action_subject (identifier) @craft.service-name)
-(action_target (identifier) @craft.service-name)
 (action_verb (identifier) @craft.regular-verb)
 
 ; Trigger context (hybrid approach)

@@ -28,7 +28,42 @@ export default grammar({
       $.actor_block,     // maps to ANTLR 'actor_def'
       $.exposure_block,  // maps to ANTLR 'exposure'
       $.use_case_block,  // maps to ANTLR 'use_case'
+      $.context_map_block, // context_map { edge_stmt* }
     ),
+
+    // context_map block: relationships between bounded contexts / services /
+    // ubiquitous-language terms, expressed as `<ref> <edge_verb> <ref>` lines.
+    // Follows the same NEWLINE framing the other brace blocks use.
+    context_map_block: $ => seq(
+      'context_map',
+      '{',
+      repeat1($._newline),
+      repeat(seq($.edge_stmt, repeat1($._newline))),
+      '}',
+      repeat($._newline),
+    ),
+
+    edge_stmt: $ => seq($.ref, $.edge_verb, $.ref),
+
+    edge_verb: $ => choice(
+      'realized_by',
+      'also_realizes',
+      'same_as',
+      'contrasts',
+      'distinct_from',
+    ),
+
+    // Typed reference. Bare form is a slug (dotted single segment like
+    // `vas.VasApplied`, or a slash path like `re/subscriptions`); typed form is
+    // `<kind>:<slug>` (e.g. `bc:re/subscriptions`, `service:subscriptions-api`).
+    ref: $ => choice(
+      $.slug,
+      seq($.ref_kind, ':', $.slug),
+    ),
+
+    // bc/term arrive via identifier; service/domain are keyword tokens (no
+    // `word:` directive) so they must be listed explicitly.
+    ref_kind: $ => choice($.identifier, 'service', 'domain'),
 
     // Import statement
     import_decl: $ => seq(
@@ -168,7 +203,14 @@ export default grammar({
       $.language_property,
       $.data_stores_property,
       $.deployment_property,
+      $.opslevel_property,
+      $.repo_property,
     ),
+
+    opslevel_property: $ => seq('opslevel', ':', $.identifier),
+
+    // ref covers the slash path form, e.g. olxeu/realestate/subscriptions
+    repo_property: $ => seq('repo', ':', $.ref),
 
     service_contexts_property: $ => seq(
       'contexts',
@@ -411,7 +453,7 @@ export default grammar({
     domain_listener: $ => seq(
       $.identifier, // Domain
       'listens',
-      $.string, // Event
+      choice($.string, $.ref), // Event: quoted string or bare/typed ref
     ),
 
     cron_trigger: $ => choice(
@@ -446,7 +488,7 @@ export default grammar({
     async_action: $ => seq(
       $.action_subject, // Domain
       'notifies',
-      $.string, // Event
+      choice($.string, $.ref), // Event: quoted string or bare/typed ref
     ),
 
     // Hybrid approach: use specific node types for internal actions
@@ -477,19 +519,29 @@ export default grammar({
 
     // Specific node types for actions (hybrid approach)
     action_subject: $ => $.identifier,  // Service or domain name in actions
-    action_target: $ => $.identifier,   // Target domain in sync actions
+    action_target: $ => $.ref,          // Target: bare name (Database) or typed ref (bc:re/billing)
     action_verb: $ => $.identifier,     // Verb in actions
 
     connector_word: $ => choice(
       'a', 'an', 'the', 'as', 'to', 'from', 'in', 'on', 'at', 'for', 'with', 'by', 'of'
     ),
 
-    // Use backup's working phrase with precedence
+    // Use backup's working phrase with precedence. Accepts free-form same-line
+    // prose: identifiers, strings, connector words, numbers, and any other
+    // non-whitespace/brace/quote chunk (punctuation like `(1! & 2!)`) via the
+    // low-precedence prose atom. Still bounded at newline (newline is not
+    // matched by _prose_atom).
     phrase: $ => prec.left(1, repeat1(choice(
       $.identifier,
       $.string,
       $.connector_word,
+      $.number,
+      $._prose_atom,
     ))),
+
+    // Any run of non-whitespace that is not a brace or quote. prec(-1) so it
+    // never shadows identifiers/keywords/numbers of equal length elsewhere.
+    _prose_atom: $ => token(prec(-1, /[^\s{}"]+/)),
 
     // Common elements - from backup
     // Allows continuation lines: items may be separated by comma + optional newlines.
