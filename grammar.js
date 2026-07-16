@@ -29,6 +29,7 @@ export default grammar({
       $.exposure_block,  // maps to ANTLR 'exposure'
       $.use_case_block,  // maps to ANTLR 'use_case'
       $.context_map_block, // context_map { edge_stmt* }
+      $.glossary_block,   // glossary { glossary_stmt* }
     ),
 
     // context_map block: relationships between bounded contexts / services /
@@ -65,6 +66,34 @@ export default grammar({
       'partnership',
       'shared_kernel',
       'separate_ways',
+    ),
+
+    // glossary block: ubiquitous-language term relationships, expressed as
+    // `<ref> <glossary_verb> <ref>` lines. Mirrors context_map_block exactly
+    // (same NEWLINE framing, same optional domain-scope identifier right
+    // after the `glossary` keyword). Term nodes reuse the existing
+    // slug/ref rules — no new ref rule needed since slug already accepts
+    // multi-segment `a/b/c` paths (verified by parsing `billing/Invoice`
+    // and `re/billing/Invoice` below).
+    glossary_block: $ => seq(
+      'glossary',
+      optional($.glossary_scope),
+      '{',
+      repeat1($._newline),
+      repeat(seq($.glossary_stmt, repeat1($._newline))),
+      '}',
+      repeat($._newline),
+    ),
+
+    glossary_scope: $ => $.identifier,
+
+    glossary_stmt: $ => seq($.ref, $.glossary_verb, $.ref),
+
+    // The 3 ubiquitous-language relationship verbs.
+    glossary_verb: $ => choice(
+      'same_as',
+      'contrasts',
+      'distinct_from',
     ),
 
     // Typed reference. Bare form is a slug (dotted single segment like

@@ -14,6 +14,7 @@
 "when" @craft.flow-keyword
 "tags" @craft.tags-keyword
 "context_map" @craft.context-map-keyword
+"glossary" @craft.glossary-keyword
 
 ; === PROPERTY KEYWORDS ===
 "contexts" @craft.contexts-property
@@ -37,6 +38,9 @@
 
 ; === EDGE VERBS (context_map) ===
 (edge_verb) @craft.edge-verb
+
+; === GLOSSARY VERBS (glossary) ===
+(glossary_verb) @craft.glossary-verb
 
 ; === REFERENCES ===
 ; Typed-ref kind (bc / term / service / domain)

@@ -67,6 +67,10 @@
         {
           "type": "SYMBOL",
           "name": "context_map_block"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "glossary_block"
         }
       ]
     },
@@ -187,6 +191,106 @@
         {
           "type": "STRING",
           "value": "separate_ways"
+        }
+      ]
+    },
+    "glossary_block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "glossary"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "glossary_scope"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_newline"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "glossary_stmt"
+              },
+              {
+                "type": "REPEAT1",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_newline"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_newline"
+          }
+        }
+      ]
+    },
+    "glossary_scope": {
+      "type": "SYMBOL",
+      "name": "identifier"
+    },
+    "glossary_stmt": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "ref"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "glossary_verb"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "ref"
+        }
+      ]
+    },
+    "glossary_verb": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "same_as"
+        },
+        {
+          "type": "STRING",
+          "value": "contrasts"
+        },
+        {
+          "type": "STRING",
+          "value": "distinct_from"
         }
       ]
     },
