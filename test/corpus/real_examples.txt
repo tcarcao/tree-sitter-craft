@@ -544,6 +544,68 @@ context_map {
           (identifier))))))
 
 ===
+Glossary block with domain scope and two verbs
+===
+
+glossary re {
+  billing/Invoice same_as re/billing/Invoice
+  billing/Invoice contrasts vas/Invoice
+}
+
+---
+
+(source_file
+  (glossary_block
+    (glossary_scope
+      (identifier))
+    (glossary_stmt
+      (ref
+        (slug
+          (identifier)
+          (identifier)))
+      (glossary_verb)
+      (ref
+        (slug
+          (identifier)
+          (identifier)
+          (identifier))))
+    (glossary_stmt
+      (ref
+        (slug
+          (identifier)
+          (identifier)))
+      (glossary_verb)
+      (ref
+        (slug
+          (identifier)
+          (identifier))))))
+
+===
+Glossary block, unscoped, with domain-qualified nodes
+===
+
+glossary {
+  re/billing/Invoice distinct_from legacy/reporting/Invoice
+}
+
+---
+
+(source_file
+  (glossary_block
+    (glossary_stmt
+      (ref
+        (slug
+          (identifier)
+          (identifier)
+          (identifier)))
+      (glossary_verb)
+      (ref
+        (slug
+          (identifier)
+          (identifier)
+          (identifier))))))
+
+===
 Service with opslevel and repo
 ===
 
