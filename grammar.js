@@ -33,9 +33,14 @@ export default grammar({
 
     // context_map block: relationships between bounded contexts / services /
     // ubiquitous-language terms, expressed as `<ref> <edge_verb> <ref>` lines.
-    // Follows the same NEWLINE framing the other brace blocks use.
+    // Follows the same NEWLINE framing the other brace blocks use. The block
+    // may optionally carry a domain-scope identifier right after the
+    // `context_map` keyword (e.g. `context_map re { ... }`), which lets
+    // endpoints inside the block be written bare (relative to that domain)
+    // instead of qualified with `domain/name`.
     context_map_block: $ => seq(
       'context_map',
+      optional($.context_map_scope),
       '{',
       repeat1($._newline),
       repeat(seq($.edge_stmt, repeat1($._newline))),
@@ -43,14 +48,23 @@ export default grammar({
       repeat($._newline),
     ),
 
+    context_map_scope: $ => $.identifier,
+
     edge_stmt: $ => seq($.ref, $.edge_verb, $.ref),
 
+    // The 8 DDD relationship verbs (Eric Evans' context-mapping patterns),
+    // per craft's edgeKeywords. Replaces the old 5 ad-hoc verbs
+    // (realized_by/also_realizes/same_as/contrasts/distinct_from) — this is
+    // a clean replacement, not a union; old syntax is no longer accepted.
     edge_verb: $ => choice(
-      'realized_by',
-      'also_realizes',
-      'same_as',
-      'contrasts',
-      'distinct_from',
+      'customer_supplier',
+      'conformist',
+      'anticorruption_layer',
+      'open_host_service',
+      'published_language',
+      'partnership',
+      'shared_kernel',
+      'separate_ways',
     ),
 
     // Typed reference. Bare form is a slug (dotted single segment like

@@ -453,8 +453,8 @@ Context map block with typed refs and edges
 ===
 
 context_map {
-  bc:re/subscriptions realized_by service:subscriptions-api
-  term:subscriptions/dunning contrasts term:billing/dunning
+  bc:re/subscriptions open_host_service service:subscriptions-api
+  term:subscriptions/dunning separate_ways term:billing/dunning
 }
 
 ---
@@ -484,6 +484,61 @@ context_map {
       (ref
         (ref_kind
           (identifier))
+        (slug
+          (identifier)
+          (identifier))))))
+
+===
+Context map block with domain scope and bare endpoints
+===
+
+context_map re {
+  billing customer_supplier vas
+  billing partnership vas
+}
+
+---
+
+(source_file
+  (context_map_block
+    (context_map_scope
+      (identifier))
+    (edge_stmt
+      (ref
+        (slug
+          (identifier)))
+      (edge_verb)
+      (ref
+        (slug
+          (identifier))))
+    (edge_stmt
+      (ref
+        (slug
+          (identifier)))
+      (edge_verb)
+      (ref
+        (slug
+          (identifier))))))
+
+===
+Context map block, unscoped, with qualified cross-domain endpoint
+===
+
+context_map {
+  re/billing separate_ways legacy/reporting
+}
+
+---
+
+(source_file
+  (context_map_block
+    (edge_stmt
+      (ref
+        (slug
+          (identifier)
+          (identifier)))
+      (edge_verb)
+      (ref
         (slug
           (identifier)
           (identifier))))))

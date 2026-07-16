@@ -376,7 +376,26 @@
       "required": false,
       "types": [
         {
+          "type": "context_map_scope",
+          "named": true
+        },
+        {
           "type": "edge_stmt",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "context_map_scope",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -1469,11 +1488,11 @@
     "named": false
   },
   {
-    "type": "also_realizes",
+    "type": "an",
     "named": false
   },
   {
-    "type": "an",
+    "type": "anticorruption_layer",
     "named": false
   },
   {
@@ -1497,6 +1516,10 @@
     "named": false
   },
   {
+    "type": "conformist",
+    "named": false
+  },
+  {
     "type": "context_map",
     "named": false
   },
@@ -1505,11 +1528,11 @@
     "named": false
   },
   {
-    "type": "contrasts",
+    "type": "cron",
     "named": false
   },
   {
-    "type": "cron",
+    "type": "customer_supplier",
     "named": false
   },
   {
@@ -1518,10 +1541,6 @@
   },
   {
     "type": "deployment",
-    "named": false
-  },
-  {
-    "type": "distinct_from",
     "named": false
   },
   {
@@ -1598,7 +1617,15 @@
     "named": false
   },
   {
+    "type": "open_host_service",
+    "named": false
+  },
+  {
     "type": "opslevel",
+    "named": false
+  },
+  {
+    "type": "partnership",
     "named": false
   },
   {
@@ -1610,7 +1637,7 @@
     "named": false
   },
   {
-    "type": "realized_by",
+    "type": "published_language",
     "named": false
   },
   {
@@ -1622,7 +1649,7 @@
     "named": false
   },
   {
-    "type": "same_as",
+    "type": "separate_ways",
     "named": false
   },
   {
@@ -1631,6 +1658,10 @@
   },
   {
     "type": "services",
+    "named": false
+  },
+  {
+    "type": "shared_kernel",
     "named": false
   },
   {
