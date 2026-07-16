@@ -78,6 +78,18 @@
           "value": "context_map"
         },
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "context_map_scope"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "STRING",
           "value": "{"
         },
@@ -120,6 +132,10 @@
         }
       ]
     },
+    "context_map_scope": {
+      "type": "SYMBOL",
+      "name": "identifier"
+    },
     "edge_stmt": {
       "type": "SEQ",
       "members": [
@@ -142,23 +158,35 @@
       "members": [
         {
           "type": "STRING",
-          "value": "realized_by"
+          "value": "customer_supplier"
         },
         {
           "type": "STRING",
-          "value": "also_realizes"
+          "value": "conformist"
         },
         {
           "type": "STRING",
-          "value": "same_as"
+          "value": "anticorruption_layer"
         },
         {
           "type": "STRING",
-          "value": "contrasts"
+          "value": "open_host_service"
         },
         {
           "type": "STRING",
-          "value": "distinct_from"
+          "value": "published_language"
+        },
+        {
+          "type": "STRING",
+          "value": "partnership"
+        },
+        {
+          "type": "STRING",
+          "value": "shared_kernel"
+        },
+        {
+          "type": "STRING",
+          "value": "separate_ways"
         }
       ]
     },
