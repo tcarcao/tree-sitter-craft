@@ -23,7 +23,7 @@
 "deployment" @craft.deployment-property
 "to" @craft.to-property
 "through" @craft.through-property
-"opslevel" @craft.opslevel-property
+"catalog_ref" @craft.catalog-ref-property
 "repo" @craft.repo-property
 
 ; === SECTION KEYWORDS ===
@@ -45,8 +45,8 @@
 ; === REFERENCES ===
 ; Typed-ref kind (bc / term / service / domain)
 (ref_kind) @craft.ref-kind
-; opslevel / repo property values (ref-shaped)
-(opslevel_property (identifier) @craft.regular-string)
+; catalog_ref / repo property values (ref-shaped)
+(catalog_ref_property (identifier) @craft.regular-string)
 (repo_property (ref (slug (identifier) @craft.regular-string)))
 ; Action target refs (asks <ref>) — replaces the old plain-identifier capture
 (action_target (ref (slug (identifier) @craft.service-name)))

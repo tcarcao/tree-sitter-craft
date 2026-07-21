@@ -246,11 +246,11 @@ export default grammar({
       $.language_property,
       $.data_stores_property,
       $.deployment_property,
-      $.opslevel_property,
+      $.catalog_ref_property,
       $.repo_property,
     ),
 
-    opslevel_property: $ => seq('opslevel', ':', $.identifier),
+    catalog_ref_property: $ => seq('catalog_ref', ':', $.identifier),
 
     // ref covers the slash path form, e.g. olxeu/realestate/subscriptions
     repo_property: $ => seq('repo', ':', $.ref),
