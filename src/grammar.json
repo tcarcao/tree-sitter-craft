@@ -900,7 +900,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "opslevel_property"
+          "name": "catalog_ref_property"
         },
         {
           "type": "SYMBOL",
@@ -908,12 +908,12 @@
         }
       ]
     },
-    "opslevel_property": {
+    "catalog_ref_property": {
       "type": "SEQ",
       "members": [
         {
           "type": "STRING",
-          "value": "opslevel"
+          "value": "catalog_ref"
         },
         {
           "type": "STRING",

@@ -606,12 +606,12 @@ glossary {
           (identifier))))))
 
 ===
-Service with opslevel and repo
+Service with catalog_ref and repo
 ===
 
 services {
   SubscriptionsApi {
-    opslevel: subscriptions-api
+    catalog_ref: subscriptions-api
     repo: olxeu/realestate/subscriptions
   }
 }
@@ -623,7 +623,7 @@ services {
     (service_definition
       (identifier)
       (service_property
-        (opslevel_property
+        (catalog_ref_property
           (identifier)))
       (service_property
         (repo_property
