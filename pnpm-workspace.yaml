@@ -1,3 +1,10 @@
+# tree-sitter's install script downloads a CLI binary we do not use: CI installs
+# tree-sitter-cli globally instead, and the parser is built from src/ by node-gyp.
+# pnpm 11 requires an explicit decision per dependency rather than silently
+# skipping, so this says no rather than leaving it to a prompt that CI cannot answer.
+allowBuilds:
+  tree-sitter: false
+
 ignoredBuiltDependencies:
   - tree-sitter
   - tree-sitter-cli
