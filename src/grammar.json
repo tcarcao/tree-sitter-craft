@@ -2318,7 +2318,12 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "STRING",
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_annotation_start"
+          },
+          "named": false,
           "value": "["
         },
         {
@@ -2547,7 +2552,12 @@
   ],
   "conflicts": [],
   "precedences": [],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "_annotation_start"
+    }
+  ],
   "inline": [],
   "supertypes": [],
   "reserved": {}
