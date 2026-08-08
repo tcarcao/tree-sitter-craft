@@ -491,10 +491,14 @@ export default grammar({
     trigger_actor: $ => $.identifier,   // Actor name in triggers
     trigger_verb: $ => $.identifier,    // Verb in triggers
 
+    // Subject of a `listens` trigger. Same slot rule as action_subject: it
+    // names a bounded context, so `re/billing listens ...` is legal.
+    listener_subject: $ => $.ref,
+
     event_trigger: $ => $.string,
 
     domain_listener: $ => seq(
-      $.identifier, // Domain
+      $.listener_subject, // Domain, possibly qualified as `<domain>/<name>`
       'listens',
       choice($.string, $.ref), // Event: quoted string or bare/typed ref
     ),
@@ -528,10 +532,16 @@ export default grammar({
       ),
     )),
 
+    // `notifies` has no phrase between the event and a possible annotation
+    // (mirrors parseNotifiesAction in craft's internal/syntax/parser.go), so
+    // the annotation is attached here explicitly. The other three action kinds
+    // pick it up through `phrase`, which is the only place a `[` can appear on
+    // those lines.
     async_action: $ => seq(
       $.action_subject, // Domain
       'notifies',
       choice($.string, $.ref), // Event: quoted string or bare/typed ref
+      optional($.operation_annotation),
     ),
 
     // Hybrid approach: use specific node types for internal actions
@@ -561,7 +571,12 @@ export default grammar({
     )),
 
     // Specific node types for actions (hybrid approach)
-    action_subject: $ => $.identifier,  // Service or domain name in actions
+    // The subject names a bounded context, so it accepts the qualified
+    // `<domain>/<name>` form as well as a bare name (craft's parseNameSlot in
+    // internal/syntax/parser.go, called from parseAction). A `kind:` prefix is
+    // a semantic diagnostic in craft, not a syntax error, so `ref` is the right
+    // shape here rather than `slug`.
+    action_subject: $ => $.ref,         // Service or domain name in actions
     action_target: $ => $.ref,          // Target: bare name (Database) or typed ref (bc:re/billing)
     action_verb: $ => $.identifier,     // Verb in actions
 
@@ -579,12 +594,59 @@ export default grammar({
       $.string,
       $.connector_word,
       $.number,
+      $.operation_annotation,
       $._prose_atom,
     ))),
 
     // Any run of non-whitespace that is not a brace or quote. prec(-1) so it
-    // never shadows identifiers/keywords/numbers of equal length elsewhere.
+    // never shadows identifiers/keywords/numbers of equal length elsewhere,
+    // and so the `[` that opens an operation_annotation (an anonymous literal
+    // at the default precedence 0) wins over a longer prose match like
+    // `[POST`. Explicit lexical precedence is compared before match length.
     _prose_atom: $ => token(prec(-1, /[^\s{}"]+/)),
+
+    // Operation annotation (craft >= 2.16.0): a trailing `[...]` on an action
+    // line, e.g. `[POST /v1/accounts/{id}/charges]`.
+    //
+    // craft's own rule (opAnnotationStart in internal/syntax/parser.go) is
+    // "the annotation is the last `[` on the line whose `]` is the line's
+    // final token; a `[` that does not close at end of line is prose". A
+    // tree-sitter grammar cannot express an end-of-line lookahead, so this
+    // rule approximates it: every balanced `[...]` group on an action line
+    // becomes an operation_annotation, so a bracket group that craft would
+    // treat as prose (`record [batch] entries [POST /v1/entries]`) is reported
+    // here as two annotations rather than one. This grammar exists for syntax
+    // highlighting; the authoritative parser lives in the craft repo.
+    operation_annotation: $ => seq(
+      '[',
+      optional(field('verb', $.operation_verb)),
+      repeat(field('payload', $.operation_payload)),
+      ']',
+    ),
+
+    // The recognised protocol verbs, mirroring protocolVerbs in craft's
+    // internal/syntax/op_verbs.go. Matching is exact and case-sensitive, and
+    // only classifies the head word: these are string literals, so against an
+    // equal-length operation_payload match the literal wins (match
+    // specificity), while a longer payload like `POSTMAN` wins on length and
+    // stays opaque. That reproduces isProtocolVerb's head-only check.
+    operation_verb: $ => choice(
+      'GET',
+      'POST',
+      'PUT',
+      'PATCH',
+      'DELETE',
+      'HEAD',
+      'OPTIONS',
+      'GRPC',
+      'TOPIC',
+      'QUERY',
+    ),
+
+    // Opaque annotation payload. Excludes only whitespace and the brackets, so
+    // `{id}`, dots, slashes and hyphens all ride along, matching the payload
+    // charset craft sweeps in parseOpAnnotation.
+    operation_payload: $ => token(/[^\s\[\]]+/),
 
     // Common elements - from backup
     // Allows continuation lines: items may be separated by comma + optional newlines.

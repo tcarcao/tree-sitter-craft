@@ -234,7 +234,9 @@ use_case "User Registration" {
         (action
           (internal_action
             (action_subject
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (action_verb
               (identifier))
             (phrase
@@ -243,7 +245,9 @@ use_case "User Registration" {
         (action
           (async_action
             (action_subject
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (string)))))))
 
 ===
@@ -292,7 +296,9 @@ use_case "Order Processing" {
         (action
           (internal_action
             (action_subject
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (action_verb
               (identifier))
             (connector_word)
@@ -302,7 +308,9 @@ use_case "Order Processing" {
         (action
           (return_action
             (action_subject
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (action_target
               (ref
                 (slug
@@ -339,7 +347,9 @@ use_case "Payment Processing" {
         (action
           (internal_action
             (action_subject
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (action_verb
               (identifier))
             (connector_word)
@@ -348,7 +358,9 @@ use_case "Payment Processing" {
         (action
           (return_action
             (action_subject
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (connector_word)
             (phrase
               (identifier)
@@ -380,7 +392,9 @@ use_case "Data Retrieval" {
         (action
           (return_action
             (action_subject
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (action_target
               (ref
                 (slug
@@ -445,7 +459,9 @@ use_case "Renewal" {
         (action
           (async_action
             (action_subject
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (string)))))))
 
 ===
@@ -651,14 +667,19 @@ use_case "Bare listen" {
     (scenario
       (when_clause
         (domain_listener
-          (identifier)
+          (listener_subject
+            (ref
+              (slug
+                (identifier))))
           (ref
             (slug
               (identifier))))
         (action
           (sync_action
             (action_subject
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (action_target
               (ref
                 (ref_kind
@@ -676,7 +697,9 @@ use_case "Bare listen" {
         (action
           (async_action
             (action_subject
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (ref
               (slug
                 (identifier)))))))))

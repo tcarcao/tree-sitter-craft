@@ -122,6 +122,11 @@
 (action_target) @content.action-target
 (action_verb) @content.action-verb
 
+; Trailing operation annotation (craft >= 2.16.0)
+(operation_annotation) @content.operation-annotation
+(operation_verb) @content.operation-verb
+(operation_payload) @content.operation-payload
+
 ; Trigger components
 (trigger_actor) @content.trigger-actor
 (trigger_verb) @content.trigger-verb

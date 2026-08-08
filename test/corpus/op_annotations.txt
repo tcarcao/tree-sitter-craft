@@ -1,0 +1,400 @@
+===
+Sync action with verb annotation containing a templated path segment
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Subscriptions asks Billing for a fresh charge attempt [POST /v1/accounts/{id}/charges]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (identifier)
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)))))))))
+
+===
+Sync action with GRPC annotation, dotted and slashed payload
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Billing asks Ledger to record the entry [GRPC ledger.Postings/Create]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)))))))))
+
+===
+Notifies with TOPIC annotation, dotted and hyphenated payload
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Billing notifies billing.ChargeSucceeded [TOPIC billing.v1.charge-succeeded]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (async_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (ref
+              (slug
+                (identifier)))
+            (operation_annotation
+              (operation_verb)
+              (operation_payload))))))))
+
+===
+Return action with opaque annotation, 200 is not a protocol verb
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Gateway returns to Billing the authorization result [200 AuthorizationResult]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (return_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (operation_annotation
+                (operation_payload)
+                (operation_payload)))))))))
+
+===
+Opaque slash-only annotation payload
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Subscriptions asks Audit to log the outcome [op1/op2/op3/op4/op5]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_payload)))))))))
+
+===
+Opaque hyphenated annotation payload
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Subscriptions asks Legacy for a reconciliation [legacy-mainframe-txn-44]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_payload)))))))))
+
+===
+Internal action with verb annotation
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        re/subscriptions marks the subscription active [PATCH /v1/subscriptions/{id}]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier)
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)))))))))
+
+===
+A verb is only recognised as the whole head word
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Billing asks Ledger to record [POSTMAN /v1/entries]
+        Billing asks Ledger to record [post /v1/entries]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (operation_annotation
+                (operation_payload)
+                (operation_payload)))))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (operation_annotation
+                (operation_payload)
+                (operation_payload)))))))))
+
+===
+Approximation: a bracket group in prose also becomes an annotation
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Billing asks Ledger to record [batch] entries [POST /v1/entries]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (operation_annotation
+                (operation_payload))
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)))))))))

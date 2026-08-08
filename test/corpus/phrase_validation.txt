@@ -22,7 +22,9 @@ use_case "Test" {
         (action
           (internal_action
             (action_subject
-              (identifier))
+              (ref
+                (slug
+                  (identifier))))
             (action_verb
               (identifier))
             (phrase

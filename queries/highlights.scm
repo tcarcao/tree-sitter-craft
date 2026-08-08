@@ -90,7 +90,9 @@
 (tag_stmt value: (slug (identifier) @craft.tag-value))
 
 ; Action context (hybrid approach)
-(action_subject (identifier) @craft.service-name)
+; action_subject is a ref, so a qualified subject (re/billing) highlights every
+; segment the same way a bare one does.
+(action_subject (ref (slug (identifier) @craft.service-name)))
 (action_verb (identifier) @craft.regular-verb)
 
 ; Trigger context (hybrid approach)
@@ -139,7 +141,17 @@
 (phrase (connector_word) @craft.phrase-word)
 
 ; Domain listener context
-(domain_listener (identifier) @craft.service-name)
+(listener_subject (ref (slug (identifier) @craft.service-name)))
+
+; === OPERATION ANNOTATIONS (craft >= 2.16.0) ===
+; `[POST /v1/accounts/{id}/charges]` trailing an action line. The verb and the
+; payload get distinct captures so the protocol reads as a keyword and the rest
+; as opaque text, mirroring how craft's LSP emits them (keyword / string in
+; internal/lsp/server.go).
+(operation_annotation verb: (operation_verb) @craft.operation-verb)
+(operation_annotation payload: (operation_payload) @craft.operation-payload)
+(operation_annotation "[" @craft.operation-bracket)
+(operation_annotation "]" @craft.operation-bracket)
 
 ; === PUNCTUATION ===
 "{" @craft.braces
