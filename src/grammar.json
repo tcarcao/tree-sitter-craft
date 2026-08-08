@@ -1911,6 +1911,10 @@
       "type": "SYMBOL",
       "name": "identifier"
     },
+    "listener_subject": {
+      "type": "SYMBOL",
+      "name": "ref"
+    },
     "event_trigger": {
       "type": "SYMBOL",
       "name": "string"
@@ -1920,7 +1924,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "identifier"
+          "name": "listener_subject"
         },
         {
           "type": "STRING",
@@ -2071,6 +2075,18 @@
               "name": "ref"
             }
           ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "operation_annotation"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -2184,7 +2200,7 @@
     },
     "action_subject": {
       "type": "SYMBOL",
-      "name": "identifier"
+      "name": "ref"
     },
     "action_target": {
       "type": "SYMBOL",
@@ -2277,6 +2293,10 @@
             },
             {
               "type": "SYMBOL",
+              "name": "operation_annotation"
+            },
+            {
+              "type": "SYMBOL",
               "name": "_prose_atom"
             }
           ]
@@ -2292,6 +2312,98 @@
           "type": "PATTERN",
           "value": "[^\\s{}\"]+"
         }
+      }
+    },
+    "operation_annotation": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "["
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "verb",
+              "content": {
+                "type": "SYMBOL",
+                "name": "operation_verb"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "FIELD",
+            "name": "payload",
+            "content": {
+              "type": "SYMBOL",
+              "name": "operation_payload"
+            }
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "]"
+        }
+      ]
+    },
+    "operation_verb": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "GET"
+        },
+        {
+          "type": "STRING",
+          "value": "POST"
+        },
+        {
+          "type": "STRING",
+          "value": "PUT"
+        },
+        {
+          "type": "STRING",
+          "value": "PATCH"
+        },
+        {
+          "type": "STRING",
+          "value": "DELETE"
+        },
+        {
+          "type": "STRING",
+          "value": "HEAD"
+        },
+        {
+          "type": "STRING",
+          "value": "OPTIONS"
+        },
+        {
+          "type": "STRING",
+          "value": "GRPC"
+        },
+        {
+          "type": "STRING",
+          "value": "TOPIC"
+        },
+        {
+          "type": "STRING",
+          "value": "QUERY"
+        }
+      ]
+    },
+    "operation_payload": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[^\\s\\[\\]]+"
       }
     },
     "identifier_list": {
