@@ -355,7 +355,7 @@ use_case "Retry" {
                 (operation_payload)))))))))
 
 ===
-Approximation: a bracket group in prose also becomes an annotation
+Only the last bracket group on the line is the annotation
 ===
 
 use_case "Retry" {
@@ -392,9 +392,219 @@ use_case "Retry" {
             (connector_word)
             (phrase
               (identifier)
-              (operation_annotation
-                (operation_payload))
               (identifier)
               (operation_annotation
                 (operation_verb)
                 (operation_payload)))))))))
+
+===
+An unclosed bracket stays prose
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Billing asks Ledger to record un[closed bracket
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (identifier))))))))
+
+===
+A stray closing bracket stays prose
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Billing asks Ledger to record closed] bracket
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (identifier))))))))
+
+===
+Trailing whitespace after the closing bracket still annotates
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Billing asks Ledger to record the entry [POST /v1/entries]   
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)))))))))
+
+===
+Nested bracket groups: the inner group opens the annotation
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Billing asks Ledger to record [a [b] c]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (operation_annotation
+                (operation_payload))
+              (identifier))))))))
+
+===
+Annotation at end of input, with no closing brace after it
+===
+
+use_case "Retry" {
+    when CRON detects a failed charge
+        Billing asks Ledger to record the entry [POST /v1/entries]
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)))))))
+    (MISSING "}")))

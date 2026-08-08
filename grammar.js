@@ -9,6 +9,15 @@ export default grammar({
     $.comment,
   ],
 
+  // `_annotation_start` is a `[` that genuinely opens a trailing operation
+  // annotation. Deciding that needs lookahead to the end of the line, which a
+  // context-free rule cannot express, so it is produced by the external
+  // scanner in src/scanner.c. When the scanner declines, the `[` is left to
+  // the internal lexer and becomes prose.
+  externals: $ => [
+    $._annotation_start,
+  ],
+
   rules: {
     // Use working backup structure for source_file
     source_file: $ => seq(
@@ -609,16 +618,14 @@ export default grammar({
     // line, e.g. `[POST /v1/accounts/{id}/charges]`.
     //
     // craft's own rule (opAnnotationStart in internal/syntax/parser.go) is
-    // "the annotation is the last `[` on the line whose `]` is the line's
-    // final token; a `[` that does not close at end of line is prose". A
-    // tree-sitter grammar cannot express an end-of-line lookahead, so this
-    // rule approximates it: every balanced `[...]` group on an action line
-    // becomes an operation_annotation, so a bracket group that craft would
-    // treat as prose (`record [batch] entries [POST /v1/entries]`) is reported
-    // here as two annotations rather than one. This grammar exists for syntax
-    // highlighting; the authoritative parser lives in the craft repo.
+    // "the annotation opener is the last `[` on the line, and the line's last
+    // token must be `]`". A `[` that fails either half is prose. That needs
+    // end-of-line lookahead at the moment the lexer sees the `[`, which no
+    // context-free rule can express, so the opening bracket comes from the
+    // external scanner in src/scanner.c. It is aliased back to `[` so the
+    // bracket is still an anonymous node the highlight queries can target.
     operation_annotation: $ => seq(
-      '[',
+      alias($._annotation_start, '['),
       optional(field('verb', $.operation_verb)),
       repeat(field('payload', $.operation_payload)),
       ']',
