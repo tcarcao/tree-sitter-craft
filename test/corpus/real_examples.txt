@@ -703,3 +703,73 @@ use_case "Bare listen" {
             (ref
               (slug
                 (identifier)))))))))
+
+===
+Use case with comma-separated tag value lists
+===
+
+use_case "Renewal" {
+    tags {
+        channels: web, mobile
+        surfaces: "web app", re/tablet-web
+        regions: eu,
+            us,
+            apac
+        journey: re/renewal-flow
+        owner: "team billing"
+    }
+
+    when Customer creates Account
+        Billing notifies "Account Created"
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (tags_block
+      (tag_stmt
+        key: (identifier)
+        value: (slug
+          (identifier))
+        value: (slug
+          (identifier)))
+      (tag_stmt
+        key: (identifier)
+        value: (string)
+        value: (slug
+          (identifier)
+          (identifier)))
+      (tag_stmt
+        key: (identifier)
+        value: (slug
+          (identifier))
+        value: (slug
+          (identifier))
+        value: (slug
+          (identifier)))
+      (tag_stmt
+        key: (identifier)
+        value: (slug
+          (identifier)
+          (identifier)))
+      (tag_stmt
+        key: (identifier)
+        value: (string)))
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (async_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (string)))))))

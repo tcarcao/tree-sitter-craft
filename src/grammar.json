@@ -1656,18 +1656,49 @@
           "type": "FIELD",
           "name": "value",
           "content": {
-            "type": "CHOICE",
+            "type": "SYMBOL",
+            "name": "_tag_value"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
             "members": [
               {
-                "type": "SYMBOL",
-                "name": "string"
+                "type": "STRING",
+                "value": ","
               },
               {
-                "type": "SYMBOL",
-                "name": "slug"
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_newline"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "value",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_tag_value"
+                }
               }
             ]
           }
+        }
+      ]
+    },
+    "_tag_value": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "string"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "slug"
         }
       ]
     },

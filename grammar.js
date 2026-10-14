@@ -430,11 +430,19 @@ export default grammar({
       '}',
     ),
 
+    // Values are a comma list (craft >= 2.18.0, parseTagValueList): quoted
+    // strings and bare slugs, mixed freely, wrapping across lines after a
+    // comma (`regions: eu,\n us,\n apac`). Each item is its own `value:`
+    // field. A dangling comma with no item after it is a craft syntax error,
+    // so it is not accepted here either.
     tag_stmt: $ => seq(
       field('key', $.identifier),
       ':',
-      field('value', choice($.string, $.slug)),
+      field('value', $._tag_value),
+      repeat(seq(',', repeat($._newline), field('value', $._tag_value))),
     ),
+
+    _tag_value: $ => choice($.string, $.slug),
 
     // Bare tag value: one or more identifier-shaped segments joined by '/',
     // e.g. `gold` (single segment) or `re/renewal-flow` (slug). Mirrors the
