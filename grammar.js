@@ -504,9 +504,13 @@ export default grammar({
       repeat(seq('/', $.identifier)),
     ),
 
+    // craft >= 2.24.0 adds `one` (notifies one of), `stream` (returns stream)
+    // and `inferred` (operation bracket marker). Each is a keyword in one slot
+    // only, so as a subject it stays an identifier through this alias.
     _branch_keyword: $ => choice(
       'alt', 'opt', 'else', 'scenario',
       'par', 'and', 'loop', 'note', 'finding',
+      'one', 'stream', 'inferred',
     ),
 
     scenario_continuation: $ => choice(
@@ -589,10 +593,22 @@ export default grammar({
 
     event_trigger: $ => $.string,
 
+    // Event item of a `listens` trigger or a `notifies`: quoted string or
+    // bare/typed ref.
+    _event: $ => choice($.string, $.ref),
+
+    // craft >= 2.24.0: `_event (',' NL* _event)*`. A trailing comma continues
+    // the list on the next line; comments between continuation lines are
+    // extras.
+    _event_list: $ => seq(
+      $._event,
+      repeat(seq(',', repeat($._newline), $._event)),
+    ),
+
     domain_listener: $ => seq(
       $.listener_subject, // Domain, possibly qualified as `<domain>/<name>`
       'listens',
-      choice($.string, $.ref), // Event: quoted string or bare/typed ref
+      $._event_list,
       // craft >= 2.23.0: optional polling schedule, `cron "..."`/`every "..."`.
       optional($.cron_trigger),
     ),
@@ -641,16 +657,25 @@ export default grammar({
     // the annotation is attached here explicitly. The other three action kinds
     // pick it up through `phrase`, which is the only place a `[` can appear on
     // those lines.
+    //
+    // craft >= 2.24.0 also accepts `notifies one of a, b`: one event per run,
+    // chosen at run time.
     async_action: $ => seq(
       $.action_subject, // Domain
       'notifies',
-      choice($.string, $.ref), // Event: quoted string or bare/typed ref
+      choice(
+        $._event,
+        // `one` followed by `of` is the list form; `x notifies one` (an
+        // event named `one`) still parses through _branch_keyword.
+        prec(1, seq('one', 'of', $._event_list)),
+      ),
       optional(choice(
         $.operation_annotation,
-        // craft drops any words between the event and the end of the line
-        // without a syntax error (`sync notifies the owners team` publishes
-        // the event `the`), so they are accepted here as a trailing phrase
-        // rather than reported as an ERROR the extension would surface.
+        // craft >= 2.24.0 reports words after the event as a syntax error
+        // (craft 2.23 dropped them silently). They are still accepted here as
+        // a trailing phrase: an ERROR node at this spot swallows the whole
+        // use_case block and breaks highlighting while the user types, and
+        // the language server already reports the error.
         alias($._notify_trailer, $.phrase),
       )),
     ),
@@ -678,6 +703,7 @@ export default grammar({
       seq(
         $.action_subject, // Source domain
         'returns',
+        optional('stream'), // craft >= 2.24.0: a reply that repeats until it ends
         'to',
         $.action_target, // Target domain
         optional($.connector_word),
@@ -688,6 +714,15 @@ export default grammar({
         'returns',
         optional($.connector_word),
         $.phrase,
+      ),
+      // craft >= 2.24.0: after `stream` the phrase is optional
+      // (`graphql returns stream`).
+      seq(
+        $.action_subject,
+        'returns',
+        'stream',
+        optional($.connector_word),
+        optional($.phrase),
       ),
     )),
 
@@ -736,8 +771,13 @@ export default grammar({
     // context-free rule can express, so the opening bracket comes from the
     // external scanner in src/scanner.c. It is aliased back to `[` so the
     // bracket is still an anonymous node the highlight queries can target.
+    //
+    // craft >= 2.24.0: `inferred` as the first word marks the hop as inferred
+    // (`[inferred]` alone is allowed). A comma list of operations
+    // (`[opA, opB]`) needs no rule: the payload token takes the commas.
     operation_annotation: $ => seq(
       alias($._annotation_start, '['),
+      optional(field('marker', 'inferred')),
       optional(field('verb', $.operation_verb)),
       repeat(field('payload', $.operation_payload)),
       ']',
@@ -760,6 +800,8 @@ export default grammar({
       'GRPC',
       'TOPIC',
       'QUERY',
+      'ADDR', // craft >= 2.24.0: egress to an address with no operation id
+      'SQL',  // craft >= 2.24.0: direct read or write of another party's tables
     ),
 
     // Opaque annotation payload. Excludes only whitespace and the brackets, so

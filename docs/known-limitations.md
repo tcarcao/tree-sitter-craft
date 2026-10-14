@@ -34,3 +34,15 @@ services {
 **Workaround:** Remove the trailing comma from the last item in a multi-line list.
 
 **Note:** The authoritative ANTLR parser (used by the `craft-cli`) handles trailing commas correctly. This limitation only affects tree-sitter (syntax highlighting in editors).
+
+## Words after a `notifies` event are accepted
+
+```craft
+        sync notifies the owners team
+```
+
+Since craft 2.24.0 the words after the event (`owners team`) are a syntax error. tree-sitter still accepts them as a trailing `phrase`.
+
+**Why:** if the grammar rejects them, the ERROR node covers the whole `use_case` block, and highlighting breaks for the block while the user types. The craft language server reports the error.
+
+The same applies to a `notifies one of` list.

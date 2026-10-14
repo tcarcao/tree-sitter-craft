@@ -689,3 +689,187 @@ use_case "X" {
               (identifier))
             (phrase
               (identifier))))))))
+
+===
+stream, one and inferred as action subjects
+===
+
+use_case "U" {
+    when x does it
+        stream returns the data
+        one notifies of.Ended
+        inferred does it
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (return_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier))))
+        (action
+          (async_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (ref
+              (slug
+                (identifier)))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))))))
+
+===
+stream, one and inferred as phrase words
+===
+
+use_case "U" {
+    when x does it
+        x asks y for one stream of inferred data
+        x does one of the things in a stream that was inferred
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (connector_word)
+              (identifier)
+              (identifier))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier)
+              (connector_word)
+              (connector_word)
+              (identifier)
+              (connector_word)
+              (connector_word)
+              (identifier)
+              (identifier)
+              (identifier)
+              (identifier))))))))
+
+===
+Notifies an event named one
+===
+
+use_case "U" {
+    when x does it
+        x notifies one
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (async_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (ref
+              (slug
+                (identifier)))))))))
+
+===
+Words after a notifies event stay a phrase
+===
+
+use_case "U" {
+    when x does it
+        sync notifies the owners team
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (async_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (ref
+              (slug
+                (identifier)))
+            (phrase
+              (identifier)
+              (identifier))))))))

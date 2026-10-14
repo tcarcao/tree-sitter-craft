@@ -1015,6 +1015,16 @@
     "type": "operation_annotation",
     "named": true,
     "fields": {
+      "marker": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "inferred",
+            "named": false
+          }
+        ]
+      },
       "payload": {
         "multiple": true,
         "required": false,
@@ -1770,6 +1780,10 @@
     "named": false
   },
   {
+    "type": "ADDR",
+    "named": false
+  },
+  {
     "type": "DELETE",
     "named": false
   },
@@ -1803,6 +1817,10 @@
   },
   {
     "type": "QUERY",
+    "named": false
+  },
+  {
+    "type": "SQL",
     "named": false
   },
   {
@@ -1971,6 +1989,10 @@
     "named": false
   },
   {
+    "type": "inferred",
+    "named": false
+  },
+  {
     "type": "language",
     "named": false
   },
@@ -2000,6 +2022,10 @@
   },
   {
     "type": "on",
+    "named": false
+  },
+  {
+    "type": "one",
     "named": false
   },
   {
@@ -2076,6 +2102,10 @@
   },
   {
     "type": "spec",
+    "named": false
+  },
+  {
+    "type": "stream",
     "named": false
   },
   {

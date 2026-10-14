@@ -1,0 +1,568 @@
+===
+Listens list on one line
+===
+
+use_case "U" {
+    when seshat listens sns.a, sns.b, "c happened"
+        seshat writes one row per event
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (domain_listener
+          (listener_subject
+            (ref
+              (slug
+                (identifier))))
+          (ref
+            (slug
+              (identifier)))
+          (ref
+            (slug
+              (identifier)))
+          (string))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier)
+              (identifier)
+              (identifier)
+              (identifier))))))))
+
+===
+Listens list over continuation lines with a comment between them
+===
+
+use_case "U" {
+    when seshat listens sns.mercury-advert-state-changed, sns.mercury-vas-state-changed,
+            // the remaining topics
+            sns.mercury-message-received, sns.mercury-cooked
+        seshat writes one row per event
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (domain_listener
+          (listener_subject
+            (ref
+              (slug
+                (identifier))))
+          (ref
+            (slug
+              (identifier)))
+          (ref
+            (slug
+              (identifier)))
+          (comment)
+          (ref
+            (slug
+              (identifier)))
+          (ref
+            (slug
+              (identifier))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier)
+              (identifier)
+              (identifier)
+              (identifier))))))))
+
+===
+Listens list followed by a schedule
+===
+
+use_case "U" {
+    when poller listens sqs.LeadRequested, sqs.LeadUpdated every "5m"
+        poller does it
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (domain_listener
+          (listener_subject
+            (ref
+              (slug
+                (identifier))))
+          (ref
+            (slug
+              (identifier)))
+          (ref
+            (slug
+              (identifier)))
+          (cron_trigger
+            (string)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))))))
+
+===
+Notifies one of over two lines with a trailing annotation
+===
+
+use_case "U" {
+    when nmf listens stream.user_event_store
+        nmf notifies one of nmfbus.FeatureEnabled, nmfbus.FeatureDisabled,
+            nmfbus.CreateAutoSchedule  [TOPIC nmfbus]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (domain_listener
+          (listener_subject
+            (ref
+              (slug
+                (identifier))))
+          (ref
+            (slug
+              (identifier))))
+        (action
+          (async_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (ref
+              (slug
+                (identifier)))
+            (ref
+              (slug
+                (identifier)))
+            (ref
+              (slug
+                (identifier)))
+            (operation_annotation
+              (operation_verb)
+              (operation_payload))))))))
+
+===
+Returns stream
+===
+
+use_case "U" {
+    when Seller asks the assistant a question
+        AiAssistant returns stream the reply as META, TOKEN and DONE events
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (connector_word)
+            (identifier)))
+        (action
+          (return_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier)
+              (identifier)
+              (identifier)
+              (identifier)
+              (identifier))))))))
+
+===
+Returns stream with no phrase
+===
+
+use_case "U" {
+    when Seller asks the assistant a question
+        AiAssistant returns stream
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (connector_word)
+            (identifier)))
+        (action
+          (return_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))))))))
+
+===
+Returns stream to a target
+===
+
+use_case "U" {
+    when frontendplatform opens the assistant
+        graphql returns stream to x each event
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (return_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (phrase
+              (identifier)
+              (identifier))))))))
+
+===
+Operation list
+===
+
+use_case "U" {
+    when x does it
+        a asks b to create the key  [CreateApiKey, CreateUsagePlanKey]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_payload)
+                (operation_payload)))))))))
+
+===
+Path with a comma and no space stays one operation
+===
+
+use_case "U" {
+    when x does it
+        a asks b for the nearest paths  [GET /p/{lat},{lon}]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)))))))))
+
+===
+Inferred marker before a verb
+===
+
+use_case "U" {
+    when x does it
+        a asks b to init the chat  [inferred POST /x]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)))))))))
+
+===
+Inferred marker alone
+===
+
+use_case "U" {
+    when x does it
+        a asks b to init the chat  [inferred]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier)
+              (operation_annotation))))))))
+
+===
+SQL verb
+===
+
+use_case "U" {
+    when x does it
+        a asks b for the graph  [SQL investment flat]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)
+                (operation_payload)))))))))
+
+===
+ADDR verb with a quoted URL
+===
+
+use_case "U" {
+    when x does it
+        a asks b to take the snapshot  [ADDR "https://a.b/c"]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)))))))))
+
+===
+Actor kinds scheduler, tool and infra
+===
+
+actors {
+    scheduler Ticker
+    tool OperatorTool
+    infra Platform
+}
+
+---
+
+(source_file
+  (actors_block
+    (actor_definition
+      (actor_type
+        (identifier))
+      (actor_name
+        (identifier)))
+    (actor_definition
+      (actor_type
+        (identifier))
+      (actor_name
+        (identifier)))
+    (actor_definition
+      (actor_type
+        (identifier))
+      (actor_name
+        (identifier)))))

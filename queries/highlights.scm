@@ -29,6 +29,13 @@
 (surface_property ["callers" "spec"] @craft.flow-keyword)
 (surface_operation ["query" "command"] @craft.flow-keyword)
 
+; craft >= 2.24.0: `notifies one of`, `returns stream`, the `[inferred ...]`
+; marker and the comma of a listens list (contextual, so node-scoped)
+(async_action ["one" "of"] @craft.flow-keyword)
+(return_action "stream" @craft.flow-keyword)
+(operation_annotation "inferred" @craft.flow-keyword)
+(domain_listener "," @craft.comma)
+
 ; === PROPERTY KEYWORDS ===
 "contexts" @craft.contexts-property
 "language" @craft.language-property
@@ -65,6 +72,10 @@
 (action_target (ref (slug (identifier) @craft.service-name)))
 
 ; === ACTOR TYPES ===
+; The six kinds craft knows (craft >= 2.24.0 adds scheduler/tool/infra); any
+; other identifier is still a valid, open kind.
+((actor_type (identifier) @type.builtin)
+  (#match? @type.builtin "^(user|system|service|scheduler|tool|infra)$"))
 (actor_type (identifier) @craft.actor-type)
 
 ; === CONNECTOR WORDS ===
