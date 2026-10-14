@@ -424,3 +424,268 @@ use_case "X" {
               (identifier))
             (phrase
               (identifier))))))))
+
+===
+And, loop and note as phrase words
+===
+
+use_case "X" {
+    when Seller adds par and loop items
+        billing charges the card and notifies the seller
+        graphql asks atlas for the loop and note fields
+        billing returns the par and finding totals
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (phrase
+            (identifier)
+            (identifier)
+            (identifier)
+            (identifier)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (identifier)
+              (connector_word)
+              (identifier))))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (identifier)
+              (identifier)
+              (identifier))))
+        (action
+          (return_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (identifier)
+              (identifier))))))))
+
+===
+Par, and, loop, note and finding as action subjects
+===
+
+use_case "X" {
+    when CRON fires the charge
+        and asks loop to run
+        note records it
+        finding records it
+        par notifies "Ran"
+        loop records the par
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))
+        (action
+          (async_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (string)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier))))))))
+
+===
+Query, command, surface and receives as ordinary words
+===
+
+use_case "X" {
+    when CRON fires the query
+        query does it
+        command asks surface for the callers spec
+        surface records the query and command
+        billing receives the every cron payment
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (identifier))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (identifier))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (identifier))))))))
+
+===
+New keywords as listener subjects
+===
+
+use_case "X" {
+    when loop listens "Ran"
+        note records it
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (domain_listener
+          (listener_subject
+            (ref
+              (slug
+                (identifier))))
+          (string))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))))))

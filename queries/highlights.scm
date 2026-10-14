@@ -18,7 +18,16 @@
 
 ; Scenario names and branch headers (keywords only in these node contexts)
 (scenario_name "scenario" @craft.flow-keyword)
-(branch_header ["alt" "opt" "else"] @craft.flow-keyword)
+(branch_header ["alt" "opt" "else" "par" "and" "loop"] @craft.flow-keyword)
+
+; craft >= 2.23.0: notes and findings, the receives trigger, the listens
+; schedule tail and surface blocks (contextual keywords, so node-scoped)
+(note_stmt ["note" "finding"] @craft.flow-keyword)
+(receive_trigger "receives" @craft.flow-keyword)
+(domain_listener (cron_trigger ["cron" "every"] @craft.flow-keyword))
+(surface_block "surface" @craft.flow-keyword)
+(surface_property ["callers" "spec"] @craft.flow-keyword)
+(surface_operation ["query" "command"] @craft.flow-keyword)
 
 ; === PROPERTY KEYWORDS ===
 "contexts" @craft.contexts-property
@@ -72,6 +81,8 @@
 ; Scenario / branch labels
 (scenario_name (string) @craft.usecase-string)
 (branch_header (string) @craft.usecase-string)
+(note_stmt (string) @craft.usecase-string)
+(surface_operation (phrase) @craft.usecase-string)
 
 ; Event strings (in async actions and domain listeners)
 (async_action (string) @craft.event-string)
@@ -147,6 +158,10 @@
 ; Phrase words - words in action phrases
 (phrase (identifier) @craft.phrase-word)
 (phrase (connector_word) @craft.phrase-word)
+
+; Surface subject and callers
+(surface_block (ref (slug (identifier) @craft.service-name)))
+(surface_property (identifier_list (identifier) @craft.actor-name))
 
 ; Domain listener context
 (listener_subject (ref (slug (identifier) @craft.service-name)))

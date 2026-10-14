@@ -39,7 +39,37 @@ export default grammar({
       $.use_case_block,  // maps to ANTLR 'use_case'
       $.context_map_block, // context_map { edge_stmt* }
       $.glossary_block,   // glossary { glossary_stmt* }
+      $.surface_block,    // craft >= 2.23.0: surface <ref> { surface_item* }
     ),
+
+    // craft >= 2.23.0: `surface <name> { ... }`, the operations one boundary
+    // (a bounded context, service or external actor) offers. Each body line
+    // is a `callers:`/`spec:` property, a note/finding, or a `query`/`command`
+    // operation line. The operation line has the shape of an action without a
+    // subject; its trailing `[op]` arrives inside `phrase`.
+    surface_block: $ => seq(
+      'surface',
+      $.ref,
+      '{',
+      repeat1($._newline),
+      repeat(seq(
+        choice($.surface_property, $.note_stmt, $.surface_operation),
+        repeat1($._newline),
+      )),
+      '}',
+      repeat($._newline),
+    ),
+
+    surface_property: $ => choice(
+      seq('callers', ':', $.identifier_list),
+      seq('spec', ':', $.string),
+    ),
+
+    surface_operation: $ => prec.left(2, seq(
+      choice('query', 'command'),
+      optional($.connector_word),
+      $.phrase,
+    )),
 
     // context_map block: relationships between bounded contexts / services /
     // ubiquitous-language terms, expressed as `<ref> <edge_verb> <ref>` lines.
@@ -412,6 +442,9 @@ export default grammar({
       '{',
       repeat1($._newline),
       optional(seq($.tags_block, repeat1($._newline))),
+      // craft >= 2.23.0: use-case-level notes and findings, before the first
+      // scenario.
+      repeat(seq($.note_stmt, repeat1($._newline))),
       $.scenario,
       '}',
       repeat($._newline),
@@ -459,7 +492,8 @@ export default grammar({
     // single segment or slug — in one `slug` node gives a uniform, single
     // `value:` child regardless of segment count.
     //
-    // The head segment also accepts the branch keywords alt/opt/else/scenario,
+    // The head segment also accepts the branch keywords alt/opt/else/scenario
+    // (and, since craft 2.23.0, par/and/loop/note/finding),
     // aliased back to identifier. They are only keywords at the start of a
     // when_clause line (branch_header / scenario_name), where an action
     // subject is equally valid, so `alt asks opt to run` keeps parsing as an
@@ -470,11 +504,15 @@ export default grammar({
       repeat(seq('/', $.identifier)),
     ),
 
-    _branch_keyword: $ => choice('alt', 'opt', 'else', 'scenario'),
+    _branch_keyword: $ => choice(
+      'alt', 'opt', 'else', 'scenario',
+      'par', 'and', 'loop', 'note', 'finding',
+    ),
 
     scenario_continuation: $ => choice(
       seq(repeat1($._newline), $.scenario),
       seq(repeat1($._newline), $.branch_header, optional($.scenario_continuation)),
+      seq(repeat1($._newline), $.note_stmt, optional($.scenario_continuation)),
       seq(repeat1($._newline), $.action, optional($.scenario_continuation)),
       repeat1($._newline),
     ),
@@ -490,10 +528,20 @@ export default grammar({
     scenario_name: $ => seq('scenario', $.string),
 
     // craft >= 2.21.0: alt/opt/else branch header lines, each with an optional
-    // label. Highlighting-level only: craft nests branches by indentation, but
-    // this grammar keeps them flat alongside the actions (no nesting model).
+    // label; craft >= 2.23.0 adds par/and/loop. Highlighting-level only: craft
+    // nests branches by indentation, but this grammar keeps them flat
+    // alongside the actions (no nesting model).
     branch_header: $ => prec.dynamic(10, seq(
-      choice('alt', 'opt', 'else'),
+      choice('alt', 'opt', 'else', 'par', 'and', 'loop'),
+      optional($.string),
+    )),
+
+    // craft >= 2.23.0: `note "..."` / `finding "..."`, one line, as a step, at
+    // use-case level before the first scenario, or in a surface body. The
+    // string is optional so a bare keyword (craft's missing-label) still
+    // highlights instead of turning the line into an error.
+    note_stmt: $ => prec.dynamic(10, seq(
+      choice('note', 'finding'),
       optional($.string),
     )),
 
@@ -503,12 +551,13 @@ export default grammar({
         seq($.external_trigger, $._newline),
         seq($.event_trigger, $._newline),
         seq($.domain_listener, $._newline),
+        seq($.receive_trigger, $._newline),
         seq($.cron_trigger, $._newline),
       ),
       // scenario_name is listed here too so a named scenario directly after an
       // action line (no blank line between) is not misread as an action whose
       // subject is `scenario`.
-      repeat(seq(choice($.action, $.branch_header, $.scenario_name), $._newline)),
+      repeat(seq(choice($.action, $.branch_header, $.scenario_name, $.note_stmt), $._newline)),
     ),
 
     // Hybrid approach: use specific node types for external triggers
@@ -544,7 +593,19 @@ export default grammar({
       $.listener_subject, // Domain, possibly qualified as `<domain>/<name>`
       'listens',
       choice($.string, $.ref), // Event: quoted string or bare/typed ref
+      // craft >= 2.23.0: optional polling schedule, `cron "..."`/`every "..."`.
+      optional($.cron_trigger),
     ),
+
+    // craft >= 2.23.0: `when <ctx> receives [connector] phrase [op]`, the
+    // callee-side trigger of an unobserved caller. The operation bracket rides
+    // inside `phrase`, as on action lines.
+    receive_trigger: $ => prec.left(2, seq(
+      $.listener_subject,
+      'receives',
+      optional($.connector_word),
+      optional($.phrase),
+    )),
 
     cron_trigger: $ => choice(
       seq('cron', $.string),   // when cron "0 * * * *"
@@ -584,8 +645,25 @@ export default grammar({
       $.action_subject, // Domain
       'notifies',
       choice($.string, $.ref), // Event: quoted string or bare/typed ref
-      optional($.operation_annotation),
+      optional(choice(
+        $.operation_annotation,
+        // craft drops any words between the event and the end of the line
+        // without a syntax error (`sync notifies the owners team` publishes
+        // the event `the`), so they are accepted here as a trailing phrase
+        // rather than reported as an ERROR the extension would surface.
+        alias($._notify_trailer, $.phrase),
+      )),
     ),
+
+    // Words after a `notifies` event. Same atoms as `phrase` minus the
+    // operation annotation, which async_action attaches directly.
+    _notify_trailer: $ => prec.left(repeat1(choice(
+      $.identifier,
+      $.string,
+      $.connector_word,
+      $.number,
+      $._prose_atom,
+    ))),
 
     // Hybrid approach: use specific node types for internal actions
     internal_action: $ => prec.left(1, seq(

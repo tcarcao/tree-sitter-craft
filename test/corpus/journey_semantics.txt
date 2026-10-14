@@ -1,0 +1,750 @@
+===
+Fan-out par
+===
+
+use_case "Seeker reads an advert" {
+    when Seeker opens an advert
+        frontendplatform asks graphql for the advert  [ad]
+        par "field resolvers"
+            graphql asks atlas for the SEO title  [postSeoadvertsbatch]
+            graphql asks atlas for the targeting data  [postAdverttargetingbatch]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_payload)))))
+        (branch_header
+          (string))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (identifier)
+              (operation_annotation
+                (operation_payload)))))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (identifier)
+              (operation_annotation
+                (operation_payload)))))))))
+
+===
+Par with and branches
+===
+
+use_case "Seeker reads an advert" {
+    when Seeker opens an advert
+        par "the advert"
+            graphql asks adcore for the advert  [GET /ads]
+            graphql asks atlas for the owner  [getAdsMappings]
+        and "the statistics"
+            graphql asks Dapi for the page statistics  [GET /projects/{site}_ad_statistics]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (branch_header
+          (string))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)))))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_payload)))))
+        (branch_header
+          (string))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)))))))))
+
+===
+Loop block
+===
+
+use_case "Promotions are synced" {
+    when cron "0 * * * *"
+        loop "for each ad id of one investment"
+            otodomintegration asks obido for the promotion  [getPromotion]
+            otodomintegration records the promotion
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (cron_trigger
+          (string))
+        (branch_header
+          (string))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_payload)))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier))))))))
+
+===
+Bare par, and and loop headers
+===
+
+use_case "U" {
+    when CRON fires the sync
+        par
+            sync records a
+        and
+            sync records b
+        loop
+            sync records c
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (branch_header)
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (connector_word))))
+        (branch_header)
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))
+        (branch_header)
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))))))
+
+===
+Use-case-level and step notes and findings
+===
+
+use_case "Seller pays an invoice" {
+    finding "nothing retries a failed callback"
+    note "observed in production"
+
+    when Seller pays an invoice
+        frontendplatform asks graphql to pay  [payInvoice]
+        note "the gateway forwards the seller's session"
+        graphql asks paymentgateway to start the payment  [POST /payments]
+        finding "no idempotency key"
+        alt "the payment provider is down"
+            note "nothing is retried"
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (note_stmt
+      (string))
+    (note_stmt
+      (string))
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (operation_annotation
+                (operation_payload)))))
+        (note_stmt
+          (string))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_verb)
+                (operation_payload)))))
+        (note_stmt
+          (string))
+        (branch_header
+          (string))
+        (note_stmt
+          (string))))))
+
+===
+Note after tags
+===
+
+use_case "U" {
+    tags {
+        owner: billing
+    }
+    note "tagged"
+    when CRON fires the sync
+        sync records it
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (tags_block
+      (tag_stmt
+        (identifier)
+        (slug
+          (identifier))))
+    (note_stmt
+      (string))
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))))))
+
+===
+Receives trigger with an operation
+===
+
+use_case "Adverts are swept for reindexing" {
+    when graphql receives a reindex sweep  [reindexAdverts]
+        graphql asks atlas for every advert  [getAlladvertstoreindex]
+        graphql returns the advert ids
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (receive_trigger
+          (listener_subject
+            (ref
+              (slug
+                (identifier))))
+          (connector_word)
+          (phrase
+            (identifier)
+            (identifier)
+            (operation_annotation
+              (operation_payload))))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (operation_annotation
+                (operation_payload)))))
+        (action
+          (return_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier))))))))
+
+===
+Receives trigger with a qualified subject and no phrase
+===
+
+use_case "U" {
+    when ad/graphql receives
+        graphql records it
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (receive_trigger
+          (listener_subject
+            (ref
+              (slug
+                (identifier)
+                (identifier)))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))))))
+
+===
+Listens a store ref on a cron schedule
+===
+
+use_case "The queued reminder is sent" {
+    when smsdispatch listens store.sms_queue.inserted cron "* 10 * * 1-5"
+        smsdispatch claims the unsent rows
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (domain_listener
+          (listener_subject
+            (ref
+              (slug
+                (identifier))))
+          (ref
+            (slug
+              (identifier)))
+          (cron_trigger
+            (string)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier))))))))
+
+===
+Listens on an every schedule
+===
+
+use_case "Lead requests are imported" {
+    when leadimporter listens sqs.LeadRequested every "5m"
+        leadimporter imports the lead
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (domain_listener
+          (listener_subject
+            (ref
+              (slug
+                (identifier))))
+          (ref
+            (slug
+              (identifier)))
+          (cron_trigger
+            (string)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier))))))))
+
+===
+Notifies a store ref
+===
+
+use_case "Invoicing queues a payment reminder" {
+    when cron "0 9 * * 1-5"
+        invoicing notifies store.sms_queue.inserted
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (cron_trigger
+          (string))
+        (action
+          (async_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (ref
+              (slug
+                (identifier)))))))))
+
+===
+Notifies with trailing words
+===
+
+use_case "U" {
+    when CRON fires the run
+        sync notifies the owners team
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (async_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (ref
+              (slug
+                (identifier)))
+            (phrase
+              (identifier)
+              (identifier))))))))
+
+===
+Surface block
+===
+
+surface concierge {
+    callers: Advisor, unknown
+    spec: "obidozoe/docs/openapi.yaml"
+    note "every route takes the shared HTTP Basic pair"
+    finding "a read-only credential is refused only at persistence"
+    query the seeker list, unpaged, newest first, filtered by a typed status  [getUserList]
+    query for the daily totals  [GET /totals]
+    command delete a seeker's account  [deleteAccount]
+}
+
+---
+
+(source_file
+  (surface_block
+    (ref
+      (slug
+        (identifier)))
+    (surface_property
+      (identifier_list
+        (identifier)
+        (identifier)))
+    (surface_property
+      (string))
+    (note_stmt
+      (string))
+    (note_stmt
+      (string))
+    (surface_operation
+      (connector_word)
+      (phrase
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)
+        (connector_word)
+        (connector_word)
+        (identifier)
+        (identifier)
+        (operation_annotation
+          (operation_payload))))
+    (surface_operation
+      (connector_word)
+      (phrase
+        (connector_word)
+        (identifier)
+        (identifier)
+        (operation_annotation
+          (operation_verb)
+          (operation_payload))))
+    (surface_operation
+      (phrase
+        (identifier)
+        (connector_word)
+        (identifier)
+        (identifier)
+        (operation_annotation
+          (operation_payload))))))
+
+===
+Surface next to a use case
+===
+
+surface ad/graphql {
+    query the advert  [ad]
+}
+
+use_case "U" {
+    when Seeker opens an advert
+        frontendplatform asks graphql for the advert  [ad]
+}
+
+---
+
+(source_file
+  (surface_block
+    (ref
+      (slug
+        (identifier)
+        (identifier)))
+    (surface_operation
+      (connector_word)
+      (phrase
+        (identifier)
+        (operation_annotation
+          (operation_payload)))))
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_payload)))))))))
