@@ -1,0 +1,426 @@
+===
+Named scenario
+===
+
+use_case "Charge" {
+    scenario "happy path"
+    when CRON fires the charge
+        billing charges the card
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (scenario_name
+        (string))
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier))))))))
+
+===
+Alt else opt block
+===
+
+use_case "Charge" {
+    when CRON fires the charge
+        alt "valid"
+            billing charges the card
+        else "expired"
+            billing flags the card
+        opt "notify"
+            billing notifies "CardFlagged"
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (branch_header
+          (string))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier))))
+        (branch_header
+          (string))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier))))
+        (branch_header
+          (string))
+        (action
+          (async_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (string)))))))
+
+===
+Alt as ordinary action subject
+===
+
+use_case "Charge" {
+    when CRON fires the charge
+        alt asks opt to run
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier))))))))
+
+===
+Bare alt header
+===
+
+use_case "Charge" {
+    when CRON fires the charge
+        alt
+            billing charges the card
+        else
+            billing flags the card
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (branch_header)
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier))))
+        (branch_header)
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier))))))))
+
+===
+Second named scenario directly after actions
+===
+
+use_case "X" {
+    scenario "s1"
+    when CRON fires the charge
+        billing does x
+    scenario "s2"
+    when CRON fires the charge
+        billing does y
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (scenario_name
+        (string))
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))
+        (scenario_name
+          (string))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))))))
+
+===
+Named scenario directly after a branch block
+===
+
+use_case "X" {
+    when CRON fires the charge
+        alt "a"
+            billing does x
+        else "b"
+            billing does y
+    scenario "s2"
+    when CRON fires the charge
+        billing does z
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (branch_header
+          (string))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))
+        (branch_header
+          (string))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))
+        (scenario_name
+          (string))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))))))
+
+===
+Scenario as an action subject
+===
+
+use_case "X" {
+    when CRON fires the charge
+        scenario asks billing to run
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier))))))))
+
+===
+Scenario as a context name
+===
+
+domain tooling {
+    scenario
+}
+
+---
+
+(source_file
+  (domain_block
+    (identifier)
+    (bounded_context
+      (identifier))))
+
+===
+Opt as an ordinary action on the first line after when
+===
+
+use_case "X" {
+    when CRON fires the charge
+        opt records x
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))))))

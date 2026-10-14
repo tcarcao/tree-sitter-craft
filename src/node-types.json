@@ -297,6 +297,21 @@
     }
   },
   {
+    "type": "branch_header",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "catalog_ref_property",
     "named": true,
     "fields": {},
@@ -806,6 +821,11 @@
     "fields": {}
   },
   {
+    "type": "identifier",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "identifier_list",
     "named": true,
     "fields": {},
@@ -1134,6 +1154,10 @@
           "named": true
         },
         {
+          "type": "scenario_name",
+          "named": true
+        },
+        {
           "type": "when_clause",
           "named": true
         }
@@ -1145,7 +1169,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
@@ -1153,7 +1177,30 @@
           "named": true
         },
         {
+          "type": "branch_header",
+          "named": true
+        },
+        {
           "type": "scenario",
+          "named": true
+        },
+        {
+          "type": "scenario_continuation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "scenario_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
           "named": true
         }
       ]
@@ -1529,6 +1576,10 @@
           "named": true
         },
         {
+          "type": "branch_header",
+          "named": true
+        },
+        {
           "type": "cron_trigger",
           "named": true
         },
@@ -1542,6 +1593,10 @@
         },
         {
           "type": "external_trigger",
+          "named": true
+        },
+        {
+          "type": "scenario_name",
           "named": true
         }
       ]
@@ -1644,6 +1699,10 @@
     "named": false
   },
   {
+    "type": "alt",
+    "named": false
+  },
+  {
     "type": "an",
     "named": false
   },
@@ -1725,6 +1784,10 @@
     "named": false
   },
   {
+    "type": "else",
+    "named": false
+  },
+  {
     "type": "every",
     "named": false
   },
@@ -1751,10 +1814,6 @@
   {
     "type": "glossary",
     "named": false
-  },
-  {
-    "type": "identifier",
-    "named": true
   },
   {
     "type": "import",
@@ -1797,6 +1856,10 @@
     "named": true
   },
   {
+    "type": "opt",
+    "named": false
+  },
+  {
     "type": "partnership",
     "named": false
   },
@@ -1822,6 +1885,10 @@
   },
   {
     "type": "same_as",
+    "named": false
+  },
+  {
+    "type": "scenario",
     "named": false
   },
   {

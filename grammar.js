@@ -450,21 +450,44 @@ export default grammar({
     // line), which is confusing for consumers. Wrapping every bare value —
     // single segment or slug — in one `slug` node gives a uniform, single
     // `value:` child regardless of segment count.
+    //
+    // The head segment also accepts the branch keywords alt/opt/else/scenario,
+    // aliased back to identifier. They are only keywords at the start of a
+    // when_clause line (branch_header / scenario_name), where an action
+    // subject is equally valid, so `alt asks opt to run` keeps parsing as an
+    // action with the same (ref (slug (identifier))) shape as any subject.
+    // Everywhere else the lexer never offers those keyword tokens.
     slug: $ => seq(
-      $.identifier,
+      choice($.identifier, alias($._branch_keyword, $.identifier)),
       repeat(seq('/', $.identifier)),
     ),
 
+    _branch_keyword: $ => choice('alt', 'opt', 'else', 'scenario'),
+
     scenario_continuation: $ => choice(
       seq(repeat1($._newline), $.scenario),
-      seq(repeat1($._newline), $.action),
+      seq(repeat1($._newline), $.branch_header, optional($.scenario_continuation)),
+      seq(repeat1($._newline), $.action, optional($.scenario_continuation)),
       repeat1($._newline),
     ),
 
     scenario: $ => seq(
+      optional(seq($.scenario_name, repeat1($._newline))),
       $.when_clause,
       optional($.scenario_continuation),
     ),
+
+    // craft >= 2.21.0: `scenario "label"` line naming the scenario that
+    // follows. Highlighting-level only.
+    scenario_name: $ => seq('scenario', $.string),
+
+    // craft >= 2.21.0: alt/opt/else branch header lines, each with an optional
+    // label. Highlighting-level only: craft nests branches by indentation, but
+    // this grammar keeps them flat alongside the actions (no nesting model).
+    branch_header: $ => prec.dynamic(10, seq(
+      choice('alt', 'opt', 'else'),
+      optional($.string),
+    )),
 
     when_clause: $ => seq(
       'when',
@@ -474,7 +497,10 @@ export default grammar({
         seq($.domain_listener, $._newline),
         seq($.cron_trigger, $._newline),
       ),
-      repeat(seq($.action, $._newline)),
+      // scenario_name is listed here too so a named scenario directly after an
+      // action line (no blank line between) is not misread as an action whose
+      // subject is `scenario`.
+      repeat(seq(choice($.action, $.branch_header, $.scenario_name), $._newline)),
     ),
 
     // Hybrid approach: use specific node types for external triggers

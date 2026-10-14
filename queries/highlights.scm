@@ -16,6 +16,10 @@
 "context_map" @craft.context-map-keyword
 "glossary" @craft.glossary-keyword
 
+; Scenario names and branch headers (keywords only in these node contexts)
+(scenario_name "scenario" @craft.flow-keyword)
+(branch_header ["alt" "opt" "else"] @craft.flow-keyword)
+
 ; === PROPERTY KEYWORDS ===
 "contexts" @craft.contexts-property
 "language" @craft.language-property
@@ -64,6 +68,10 @@
 ; === STRINGS - CONTEXT DEPENDENT ===
 ; Use case strings
 (use_case_block (string) @craft.usecase-string)
+
+; Scenario / branch labels
+(scenario_name (string) @craft.usecase-string)
+(branch_header (string) @craft.usecase-string)
 
 ; Event strings (in async actions and domain listeners)
 (async_action (string) @craft.event-string)
