@@ -1,5 +1,7 @@
 ; Comments
 (comment) @craft.comment
+; craft >= 2.25.0: `//@` source cites (a comment to craft, evidence to the reader)
+(source_comment) @comment.documentation
 
 ; === BLOCK KEYWORDS ===
 "services" @craft.services-keyword
@@ -35,6 +37,11 @@
 (return_action "stream" @craft.flow-keyword)
 (operation_annotation "inferred" @craft.flow-keyword)
 (domain_listener "," @craft.comma)
+
+; craft >= 2.25.0: `includes "…"` / `continues "…"` link steps (contextual
+; keywords, so node-scoped; as subjects they stay identifiers)
+(link_stmt ["includes" "continues"] @craft.flow-keyword)
+(link_stmt (string) @craft.usecase-string)
 
 ; === PROPERTY KEYWORDS ===
 "contexts" @craft.contexts-property

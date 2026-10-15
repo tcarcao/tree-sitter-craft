@@ -1,0 +1,427 @@
+===
+Source comment at file level
+===
+
+//@ re-x pkg/a.go:5-9 -- a file header cite
+use_case "U" {
+    when Seller opens the page
+        web asks api for the page
+}
+
+---
+
+(source_file
+  (source_comment)
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier))))))))
+
+===
+Source comments under a trigger, an action and the use case
+===
+
+use_case "nMF mails the seller about an add-on event" {
+    //@ re-monetization-framework functions/eb_email_sender/eb_email_sender.go:5 -- one rule, eight detail-types
+    when nmf_monetization listens nmfbus.AddOnPurchased
+        //@ eb_email_sender.go:5-40
+        nmf_monetization picks the mail resolver from the event type alone
+        // a plain comment between the step and its cite
+        //@ pkg/siren/siren.go:63-115, :120 -- a 423 for a suppressed address counts as delivered
+        nmf_monetization asks siren to send the purchase mail  [POST /api/v1/event]
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (source_comment)
+    (scenario
+      (when_clause
+        (domain_listener
+          (listener_subject
+            (ref
+              (slug
+                (identifier))))
+          (ref
+            (slug
+              (identifier)))))
+      (source_comment)
+      (scenario_continuation
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (connector_word)
+              (connector_word)
+              (identifier)
+              (identifier)
+              (identifier))))
+        (scenario_continuation
+          (comment)
+          (source_comment)
+          (action
+            (sync_action
+              (action_subject
+                (ref
+                  (slug
+                    (identifier))))
+              (action_target
+                (ref
+                  (slug
+                    (identifier))))
+              (connector_word)
+              (phrase
+                (identifier)
+                (connector_word)
+                (identifier)
+                (identifier)
+                (operation_annotation
+                  (operation_verb)
+                  (operation_payload)))))
+          (scenario_continuation))))))
+
+===
+A spaced at-sign is a plain comment
+===
+
+use_case "U" {
+    when Seller opens the page
+        // @ x is not a cite
+        web asks api for the page
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier))))
+      (comment)
+      (scenario_continuation
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier))))
+        (scenario_continuation)))))
+
+===
+Includes and continues as steps
+===
+
+use_case "Seller asks the assistant a question" {
+    when Seller asks the assistant a question
+        includes "Site session preamble"
+        frontendplatform asks graphql to stream the answer  [assistantStream]
+}
+
+use_case "Seller promotes an advert" {
+    when Seller promotes an advert
+        frontendplatform asks graphql for the promotion offers  [promotionOffers]
+        continues "Seller pays at the checkout"
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)
+            (connector_word)
+            (identifier)))
+        (link_stmt
+          (string))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier)
+              (operation_annotation
+                (operation_payload))))))))
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier)
+              (identifier)
+              (operation_annotation
+                (operation_payload)))))
+        (link_stmt
+          (string))))))
+
+===
+Links inside an alt and under a named scenario
+===
+
+use_case "U" {
+    when Seller opens the checkout
+        alt "logged in"
+            includes "Site session preamble"
+            //@ web src/checkout.ts:12
+        else
+            continues "Seller logs in"
+
+    scenario "second"
+    when Seller opens the cart
+        continues "Seller pays at the checkout"
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (branch_header
+          (string))
+        (link_stmt
+          (string)))
+      (source_comment)
+      (scenario_continuation
+        (branch_header)
+        (scenario_continuation
+          (link_stmt
+            (string))
+          (scenario_continuation
+            (scenario
+              (scenario_name
+                (string))
+              (when_clause
+                (external_trigger
+                  (trigger_actor
+                    (identifier))
+                  (trigger_verb
+                    (identifier))
+                  (connector_word)
+                  (phrase
+                    (identifier)))
+                (link_stmt
+                  (string))))))))))
+
+===
+Link words as subjects stay actions
+===
+
+use_case "U" {
+    when Seller opens the page
+        includes ships the order
+        continues to run
+        continues asks includes for the page
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (phrase
+              (identifier))))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (connector_word)
+              (identifier))))))))
+
+===
+Link words inside phrases
+===
+
+use_case "U" {
+    when Seller continues the checkout
+        web includes the photos in the draft
+        api continues the upload and includes the receipt
+        api returns the result that continues
+}
+
+---
+
+(source_file
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (connector_word)
+              (identifier))))
+        (action
+          (internal_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_verb
+              (identifier))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (identifier)
+              (connector_word)
+              (identifier))))
+        (action
+          (return_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (identifier)
+              (identifier))))))))

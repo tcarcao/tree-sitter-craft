@@ -906,6 +906,21 @@
     }
   },
   {
+    "type": "link_stmt",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "listener_subject",
     "named": true,
     "fields": {},
@@ -1234,6 +1249,10 @@
         },
         {
           "type": "branch_header",
+          "named": true
+        },
+        {
+          "type": "link_stmt",
           "named": true
         },
         {
@@ -1729,6 +1748,10 @@
           "named": true
         },
         {
+          "type": "link_stmt",
+          "named": true
+        },
+        {
           "type": "note_stmt",
           "named": true
         },
@@ -1908,6 +1931,10 @@
     "named": false
   },
   {
+    "type": "continues",
+    "named": false
+  },
+  {
     "type": "contrasts",
     "named": false
   },
@@ -1986,6 +2013,10 @@
   },
   {
     "type": "in",
+    "named": false
+  },
+  {
+    "type": "includes",
     "named": false
   },
   {
@@ -2099,6 +2130,11 @@
   {
     "type": "shared_kernel",
     "named": false
+  },
+  {
+    "type": "source_comment",
+    "named": true,
+    "extra": true
   },
   {
     "type": "spec",

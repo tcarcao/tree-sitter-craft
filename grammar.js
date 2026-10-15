@@ -6,6 +6,7 @@ export default grammar({
     /[ \t]/,
     $._newline,
     $.doc_comment,
+    $.source_comment,
     $.comment,
   ],
 
@@ -511,12 +512,15 @@ export default grammar({
       'alt', 'opt', 'else', 'scenario',
       'par', 'and', 'loop', 'note', 'finding',
       'one', 'stream', 'inferred',
+      // craft >= 2.25.0: link steps, `includes "…"` / `continues "…"`
+      'includes', 'continues',
     ),
 
     scenario_continuation: $ => choice(
       seq(repeat1($._newline), $.scenario),
       seq(repeat1($._newline), $.branch_header, optional($.scenario_continuation)),
       seq(repeat1($._newline), $.note_stmt, optional($.scenario_continuation)),
+      seq(repeat1($._newline), $.link_stmt, optional($.scenario_continuation)),
       seq(repeat1($._newline), $.action, optional($.scenario_continuation)),
       repeat1($._newline),
     ),
@@ -549,6 +553,17 @@ export default grammar({
       optional($.string),
     )),
 
+    // craft >= 2.25.0: a link step. `includes "<title>"` runs the target use
+    // case at this point; `continues "<title>"` hands the flow on to it. Both
+    // words are keywords only at the start of a step line and before a
+    // string, so `includes ships the order` stays an action (the words go
+    // through _branch_keyword as a subject, like alt/opt). Unlike note_stmt
+    // the string is required: a bare word is an ordinary subject here.
+    link_stmt: $ => prec.dynamic(10, seq(
+      choice('includes', 'continues'),
+      $.string,
+    )),
+
     when_clause: $ => seq(
       'when',
       choice(
@@ -561,7 +576,7 @@ export default grammar({
       // scenario_name is listed here too so a named scenario directly after an
       // action line (no blank line between) is not misread as an action whose
       // subject is `scenario`.
-      repeat(seq(choice($.action, $.branch_header, $.scenario_name, $.note_stmt), $._newline)),
+      repeat(seq(choice($.action, $.branch_header, $.scenario_name, $.note_stmt, $.link_stmt), $._newline)),
     ),
 
     // Hybrid approach: use specific node types for external triggers
@@ -837,6 +852,12 @@ export default grammar({
     boolean: $ => choice('true', 'false'),
 
     doc_comment: $ => /\/\/\/[^\n]*/,
+
+    // craft >= 2.25.0: `//@ [repo] path[:ranges][, …] [-- text]`, a source
+    // cite. To craft it is a comment that attaches to the step above it; it
+    // gets its own node so editors can highlight it apart from prose
+    // comments. `// @` (with a space) stays a plain comment.
+    source_comment: $ => token(prec(1, /\/\/@[^\n]*/)),
 
     comment: $ => choice(
       /\/\/[^\n]*/,

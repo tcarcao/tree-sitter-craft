@@ -1958,6 +1958,14 @@
         {
           "type": "STRING",
           "value": "inferred"
+        },
+        {
+          "type": "STRING",
+          "value": "includes"
+        },
+        {
+          "type": "STRING",
+          "value": "continues"
         }
       ]
     },
@@ -2021,6 +2029,34 @@
             {
               "type": "SYMBOL",
               "name": "note_stmt"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "scenario_continuation"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "REPEAT1",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_newline"
+              }
+            },
+            {
+              "type": "SYMBOL",
+              "name": "link_stmt"
             },
             {
               "type": "CHOICE",
@@ -2215,6 +2251,32 @@
         ]
       }
     },
+    "link_stmt": {
+      "type": "PREC_DYNAMIC",
+      "value": 10,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "includes"
+              },
+              {
+                "type": "STRING",
+                "value": "continues"
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "string"
+          }
+        ]
+      }
+    },
     "when_clause": {
       "type": "SEQ",
       "members": [
@@ -2315,6 +2377,10 @@
                   {
                     "type": "SYMBOL",
                     "name": "note_stmt"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "link_stmt"
                   }
                 ]
               },
@@ -3214,6 +3280,17 @@
       "type": "PATTERN",
       "value": "\\/\\/\\/[^\\n]*"
     },
+    "source_comment": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "\\/\\/@[^\\n]*"
+        }
+      }
+    },
     "comment": {
       "type": "CHOICE",
       "members": [
@@ -3257,6 +3334,10 @@
     {
       "type": "SYMBOL",
       "name": "doc_comment"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "source_comment"
     },
     {
       "type": "SYMBOL",
