@@ -41,6 +41,33 @@ export default grammar({
       $.context_map_block, // context_map { edge_stmt* }
       $.glossary_block,   // glossary { glossary_stmt* }
       $.surface_block,    // craft >= 2.23.0: surface <ref> { surface_item* }
+      $.flow_block,       // craft >= 2.35.0: flow <ref> "<name>" { flow_item* }
+    ),
+
+    // craft >= 2.35.0: `flow <ref> "<name>" { ... }`, a critical flow: a
+    // named, prioritised, owned business outcome that use cases point at with
+    // a `realises:` tag (an ordinary tag_stmt). Each body line is a
+    // `priority:`/`owner:`/`metric:` property or a note/finding. Craft
+    // reports any other key; here it parses too, so the line still
+    // highlights.
+    flow_block: $ => seq(
+      'flow',
+      field('ref', $.identifier),
+      field('name', $.string),
+      '{',
+      repeat1($._newline),
+      repeat(seq(
+        choice($.flow_property, $.note_stmt),
+        repeat1($._newline),
+      )),
+      '}',
+      repeat($._newline),
+    ),
+
+    flow_property: $ => seq(
+      field('key', choice('priority', 'owner', 'metric', $.identifier)),
+      ':',
+      field('value', choice($.identifier, $.string)),
     ),
 
     // craft >= 2.23.0: `surface <name> { ... }`, the operations one boundary
@@ -369,7 +396,8 @@ export default grammar({
       '}',
     ),
 
-    bounded_context: $ => $.identifier,
+    // craft >= 2.27.0: an optional display name, a string on the same line.
+    bounded_context: $ => seq($.identifier, optional(field('display_name', $.string))),
 
     // Actors definitions - following same pattern as domains/services
     // ANTLR: actor_def: 'actor' actor_type actor_name NEWLINE*;
@@ -377,6 +405,7 @@ export default grammar({
       'actor',
       $.actor_type,
       $.actor_name,
+      optional(field('display_name', $.string)), // craft >= 2.27.0
       repeat($._newline),
     ),
 
@@ -394,6 +423,7 @@ export default grammar({
     actor_definition: $ => seq(
       $.actor_type,
       $.actor_name,
+      optional(field('display_name', $.string)), // craft >= 2.27.0
     ),
 
     // Q5: actor_type is now open (any identifier)

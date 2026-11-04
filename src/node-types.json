@@ -74,7 +74,18 @@
   {
     "type": "actor_block",
     "named": true,
-    "fields": {},
+    "fields": {
+      "display_name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -93,7 +104,18 @@
   {
     "type": "actor_definition",
     "named": true,
-    "fields": {},
+    "fields": {
+      "display_name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -288,7 +310,18 @@
   {
     "type": "bounded_context",
     "named": true,
-    "fields": {},
+    "fields": {
+      "display_name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": false,
       "required": true,
@@ -753,6 +786,88 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "flow_block",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "ref": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "flow_property",
+          "named": true
+        },
+        {
+          "type": "note_stmt",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "flow_property",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "metric",
+            "named": false
+          },
+          {
+            "type": "owner",
+            "named": false
+          },
+          {
+            "type": "priority",
+            "named": false
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1460,6 +1575,10 @@
           "named": true
         },
         {
+          "type": "flow_block",
+          "named": true
+        },
+        {
           "type": "glossary_block",
           "named": true
         },
@@ -1992,6 +2111,10 @@
     "named": false
   },
   {
+    "type": "flow",
+    "named": false
+  },
+  {
     "type": "for",
     "named": false
   },
@@ -2036,6 +2159,10 @@
     "named": false
   },
   {
+    "type": "metric",
+    "named": false
+  },
+  {
     "type": "note",
     "named": false
   },
@@ -2072,6 +2199,10 @@
     "named": false
   },
   {
+    "type": "owner",
+    "named": false
+  },
+  {
     "type": "par",
     "named": false
   },
@@ -2085,6 +2216,10 @@
   },
   {
     "type": "presentation",
+    "named": false
+  },
+  {
+    "type": "priority",
     "named": false
   },
   {

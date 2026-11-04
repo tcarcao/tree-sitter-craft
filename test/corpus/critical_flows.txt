@@ -1,0 +1,161 @@
+================================================================================
+Flow block with properties and a note
+================================================================================
+
+flow lead-message "Lead generation (phone and message)" {
+    priority: P1
+    owner: seeker-engagement
+    metric: "Leads"
+    note "counted once per seeker and advert"
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (flow_block
+    (identifier)
+    (string)
+    (flow_property
+      (identifier))
+    (flow_property
+      (identifier))
+    (flow_property
+      (string))
+    (note_stmt
+      (string))))
+
+================================================================================
+Use case realising flows
+================================================================================
+
+use_case "Seeker calls the seller" {
+    tags {
+        realises: lead-phone, lead-message
+    }
+
+    when Seeker calls the seller
+        chat asks telephony to connect the call
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (use_case_block
+    (string)
+    (tags_block
+      (tag_stmt
+        (identifier)
+        (slug
+          (identifier))
+        (slug
+          (identifier))))
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier))))))))
+
+================================================================================
+Flow, priority, owner and metric as ordinary words
+================================================================================
+
+domain flow {
+    flow
+}
+
+use_case "Flow word stays a name" {
+    when flow starts the flow
+        flow asks owner to set the priority metric
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (domain_block
+    (identifier)
+    (bounded_context
+      (identifier)))
+  (use_case_block
+    (string)
+    (scenario
+      (when_clause
+        (external_trigger
+          (trigger_actor
+            (identifier))
+          (trigger_verb
+            (identifier))
+          (connector_word)
+          (phrase
+            (identifier)))
+        (action
+          (sync_action
+            (action_subject
+              (ref
+                (slug
+                  (identifier))))
+            (action_target
+              (ref
+                (slug
+                  (identifier))))
+            (connector_word)
+            (phrase
+              (identifier)
+              (connector_word)
+              (identifier)
+              (identifier))))))))
+
+================================================================================
+Display names on actors and bounded contexts
+================================================================================
+
+actors {
+    user Seller "the seller"
+}
+
+actor system Gateway "the payment gateway"
+
+domain Identity {
+    Authentication "sign-in"
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (actors_block
+    (actor_definition
+      (actor_type
+        (identifier))
+      (actor_name
+        (identifier))
+      (string)))
+  (actor_block
+    (actor_type
+      (identifier))
+    (actor_name
+      (identifier))
+    (string))
+  (domain_block
+    (identifier)
+    (bounded_context
+      (identifier)
+      (string))))

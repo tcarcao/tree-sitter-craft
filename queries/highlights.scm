@@ -43,6 +43,12 @@
 (link_stmt ["includes" "continues"] @craft.flow-keyword)
 (link_stmt (string) @craft.usecase-string)
 
+; craft >= 2.35.0: critical flows (contextual keywords, so node-scoped)
+(flow_block "flow" @craft.flow-keyword)
+(flow_block ref: (identifier) @craft.service-name)
+(flow_block name: (string) @craft.usecase-string)
+(flow_property key: _ @craft.language-property)
+
 ; === PROPERTY KEYWORDS ===
 "contexts" @craft.contexts-property
 "language" @craft.language-property
