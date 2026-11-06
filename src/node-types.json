@@ -1183,6 +1183,88 @@
     "fields": {}
   },
   {
+    "type": "page_block",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "ref": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "note_stmt",
+          "named": true
+        },
+        {
+          "type": "page_property",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "page_property",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "platform",
+            "named": false
+          },
+          {
+            "type": "product_domain",
+            "named": false
+          },
+          {
+            "type": "url",
+            "named": false
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "phrase",
     "named": true,
     "fields": {},
@@ -1587,6 +1669,10 @@
           "named": true
         },
         {
+          "type": "page_block",
+          "named": true
+        },
+        {
           "type": "service_block",
           "named": true
         },
@@ -1604,11 +1690,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "string",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "surface_block",
@@ -1884,10 +1965,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "\"",
-    "named": false
   },
   {
     "type": "(",
@@ -2203,6 +2280,10 @@
     "named": false
   },
   {
+    "type": "page",
+    "named": false
+  },
+  {
     "type": "par",
     "named": false
   },
@@ -2215,11 +2296,19 @@
     "named": true
   },
   {
+    "type": "platform",
+    "named": false
+  },
+  {
     "type": "presentation",
     "named": false
   },
   {
     "type": "priority",
+    "named": false
+  },
+  {
+    "type": "product_domain",
     "named": false
   },
   {
@@ -2280,6 +2369,10 @@
     "named": false
   },
   {
+    "type": "string",
+    "named": true
+  },
+  {
     "type": "surface",
     "named": false
   },
@@ -2301,6 +2394,10 @@
   },
   {
     "type": "true",
+    "named": false
+  },
+  {
+    "type": "url",
     "named": false
   },
   {

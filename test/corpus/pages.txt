@@ -1,0 +1,28 @@
+================================================================================
+Page block with properties and a note
+================================================================================
+
+page account-adverts "My Account: My Ads" {
+    url: "https://www.otodom.pl/wiadomosci/moje-ogloszenia"
+    url: "https://www.storia.ro/ro/contul-meu"
+    platform: frontoffice
+    product_domain: ad-inventory
+    note "the old Atlas page is still served for agencies"
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (page_block
+    (identifier)
+    (string)
+    (page_property
+      (string))
+    (page_property
+      (string))
+    (page_property
+      (identifier))
+    (page_property
+      (identifier))
+    (note_stmt
+      (string))))

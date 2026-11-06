@@ -49,6 +49,12 @@
 (flow_block name: (string) @craft.usecase-string)
 (flow_property key: _ @craft.language-property)
 
+; craft >= 2.36.0: pages (contextual keywords, so node-scoped)
+(page_block "page" @craft.flow-keyword)
+(page_block ref: (identifier) @craft.service-name)
+(page_block name: (string) @craft.usecase-string)
+(page_property key: _ @craft.language-property)
+
 ; === PROPERTY KEYWORDS ===
 "contexts" @craft.contexts-property
 "language" @craft.language-property

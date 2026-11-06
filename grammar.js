@@ -42,6 +42,7 @@ export default grammar({
       $.glossary_block,   // glossary { glossary_stmt* }
       $.surface_block,    // craft >= 2.23.0: surface <ref> { surface_item* }
       $.flow_block,       // craft >= 2.35.0: flow <ref> "<name>" { flow_item* }
+      $.page_block,       // craft >= 2.36.0: page <ref> "<name>" { page_item* }
     ),
 
     // craft >= 2.35.0: `flow <ref> "<name>" { ... }`, a critical flow: a
@@ -66,6 +67,30 @@ export default grammar({
 
     flow_property: $ => seq(
       field('key', choice('priority', 'owner', 'metric', $.identifier)),
+      ':',
+      field('value', choice($.identifier, $.string)),
+    ),
+
+    // craft >= 2.36.0: `page <ref> "<name>" { ... }`, a page users see.
+    // Use cases point at it with an `entry:` tag (an ordinary tag_stmt). Each
+    // body line is a `url:`/`platform:`/`product_domain:` property or a
+    // note/finding; craft reports any other key, here it parses too.
+    page_block: $ => seq(
+      'page',
+      field('ref', $.identifier),
+      field('name', $.string),
+      '{',
+      repeat1($._newline),
+      repeat(seq(
+        choice($.page_property, $.note_stmt),
+        repeat1($._newline),
+      )),
+      '}',
+      repeat($._newline),
+    ),
+
+    page_property: $ => seq(
+      field('key', choice('url', 'platform', 'product_domain', $.identifier)),
       ':',
       field('value', choice($.identifier, $.string)),
     ),
@@ -866,14 +891,15 @@ export default grammar({
     // Q9: identifiers now allow dots (e.g. my.service)
     identifier: $ => /[a-zA-Z0-9_][a-zA-Z0-9_.-]*/,
 
-    string: $ => seq(
+    // One token, so `//` inside a string (a URL) is not a comment.
+    string: $ => token(seq(
       '"',
       repeat(choice(
         /[^"\\]/,
         /\\./,
       )),
       '"',
-    ),
+    )),
 
     number: $ => /\d+/,
 
