@@ -55,6 +55,13 @@
 (page_block name: (string) @craft.usecase-string)
 (page_property key: _ @craft.language-property)
 
+; craft >= 2.37.0: actor bodies (`ai:` / `owner:`; contextual, so node-scoped)
+(actor_property key: _ @craft.language-property)
+(actor_property value: (string) @craft.usecase-string)
+
+; craft >= 2.38.0: `alias:` lines in flow and page bodies are matched by the
+; flow_property / page_property key captures above (`alias` is a key literal).
+
 ; === PROPERTY KEYWORDS ===
 "contexts" @craft.contexts-property
 "language" @craft.language-property

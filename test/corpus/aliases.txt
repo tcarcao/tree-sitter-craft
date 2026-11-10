@@ -1,0 +1,40 @@
+================================================================================
+Repeatable alias lines in flow and page bodies (craft 2.38)
+================================================================================
+
+flow vas-activation "VAS activation" {
+    priority: P2
+    owner: "VAS Excellence"
+    alias: promotion
+    alias: "promoted ad"
+}
+
+page account-statistics "Ad Statistics" {
+    product_domain: seller-analytics
+    alias: performance
+    alias: "estatísticas do anúncio"
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (flow_block
+    ref: (identifier)
+    name: (string)
+    (flow_property
+      value: (identifier))
+    (flow_property
+      value: (string))
+    (flow_property
+      value: (identifier))
+    (flow_property
+      value: (string)))
+  (page_block
+    ref: (identifier)
+    name: (string)
+    (page_property
+      value: (identifier))
+    (page_property
+      value: (identifier))
+    (page_property
+      value: (string))))
