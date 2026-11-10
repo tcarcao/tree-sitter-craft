@@ -75,6 +75,16 @@
     "type": "actor_block",
     "named": true,
     "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "actor_body",
+            "named": true
+          }
+        ]
+      },
       "display_name": {
         "multiple": false,
         "required": false,
@@ -102,9 +112,38 @@
     }
   },
   {
+    "type": "actor_body",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "actor_property",
+          "named": true
+        },
+        {
+          "type": "note_stmt",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "actor_definition",
     "named": true,
     "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "actor_body",
+            "named": true
+          }
+        ]
+      },
       "display_name": {
         "multiple": false,
         "required": false,
@@ -144,6 +183,44 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "actor_property",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ai",
+            "named": false
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "owner",
+            "named": false
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -837,6 +914,10 @@
         "required": true,
         "types": [
           {
+            "type": "alias",
+            "named": false
+          },
+          {
             "type": "identifier",
             "named": true
           },
@@ -1230,6 +1311,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "alias",
+            "named": false
+          },
           {
             "type": "identifier",
             "named": true
@@ -2064,6 +2149,14 @@
   },
   {
     "type": "actors",
+    "named": false
+  },
+  {
+    "type": "ai",
+    "named": false
+  },
+  {
+    "type": "alias",
     "named": false
   },
   {

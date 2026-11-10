@@ -50,7 +50,7 @@ export default grammar({
     // a `realises:` tag (an ordinary tag_stmt). Each body line is a
     // `priority:`/`owner:`/`metric:` property or a note/finding. Craft
     // reports any other key; here it parses too, so the line still
-    // highlights.
+    // highlights. craft >= 2.38.0: `alias:` is repeatable, one per line.
     flow_block: $ => seq(
       'flow',
       field('ref', $.identifier),
@@ -66,7 +66,7 @@ export default grammar({
     ),
 
     flow_property: $ => seq(
-      field('key', choice('priority', 'owner', 'metric', $.identifier)),
+      field('key', choice('priority', 'owner', 'metric', 'alias', $.identifier)),
       ':',
       field('value', choice($.identifier, $.string)),
     ),
@@ -75,6 +75,7 @@ export default grammar({
     // Use cases point at it with an `entry:` tag (an ordinary tag_stmt). Each
     // body line is a `url:`/`platform:`/`product_domain:` property or a
     // note/finding; craft reports any other key, here it parses too.
+    // craft >= 2.38.0: `alias:` is repeatable, one per line.
     page_block: $ => seq(
       'page',
       field('ref', $.identifier),
@@ -90,7 +91,7 @@ export default grammar({
     ),
 
     page_property: $ => seq(
-      field('key', choice('url', 'platform', 'product_domain', $.identifier)),
+      field('key', choice('url', 'platform', 'product_domain', 'alias', $.identifier)),
       ':',
       field('value', choice($.identifier, $.string)),
     ),
@@ -431,7 +432,29 @@ export default grammar({
       $.actor_type,
       $.actor_name,
       optional(field('display_name', $.string)), // craft >= 2.27.0
+      optional(field('body', $.actor_body)),      // craft >= 2.37.0
       repeat($._newline),
+    ),
+
+    // craft >= 2.37.0: an optional body on the name's line, classifying the
+    // external system the actor stands for: `ai:` (ml | genai | agentic) and
+    // `owner:` properties plus note/finding lines. One property may share
+    // the braces' line (`{ ai: ml }`). Craft reports any other key (and an
+    // invalid ai kind); here it parses too, so the line still highlights.
+    actor_body: $ => seq(
+      '{',
+      repeat($._newline),
+      repeat(seq(
+        choice($.actor_property, $.note_stmt),
+        repeat($._newline),
+      )),
+      '}',
+    ),
+
+    actor_property: $ => seq(
+      field('key', choice('ai', 'owner', $.identifier)),
+      ':',
+      field('value', choice($.identifier, $.string)),
     ),
 
     // ANTLR: actors_def: 'actors' '{' NEWLINE* actor_definition_list '}' NEWLINE*;  
@@ -449,6 +472,7 @@ export default grammar({
       $.actor_type,
       $.actor_name,
       optional(field('display_name', $.string)), // craft >= 2.27.0
+      optional(field('body', $.actor_body)),      // craft >= 2.37.0
     ),
 
     // Q5: actor_type is now open (any identifier)
